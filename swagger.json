@@ -927,6 +927,450 @@
           "CollectionCount"
         ]
       }
+    },
+    "/hotels": {
+      "post": {
+        "operationId": "HotelController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateHotelDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Hotel created successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "summary": "Create a new hotel (Admin only)",
+        "tags": [
+          "Hotels"
+        ]
+      },
+      "get": {
+        "operationId": "HotelController_findAll",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Search by name, location, or city",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "city",
+            "required": false,
+            "in": "query",
+            "description": "Filter by city",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "country",
+            "required": false,
+            "in": "query",
+            "description": "Filter by country",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "min_price",
+            "required": false,
+            "in": "query",
+            "description": "Minimum price",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "max_price",
+            "required": false,
+            "in": "query",
+            "description": "Maximum price",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "min_star_rating",
+            "required": false,
+            "in": "query",
+            "description": "Minimum star rating",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "min_rating",
+            "required": false,
+            "in": "query",
+            "description": "Minimum rating",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "has_wifi",
+            "required": false,
+            "in": "query",
+            "description": "Has WiFi",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "has_pool",
+            "required": false,
+            "in": "query",
+            "description": "Has Pool",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "has_spa",
+            "required": false,
+            "in": "query",
+            "description": "Has Spa",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "has_gym",
+            "required": false,
+            "in": "query",
+            "description": "Has Gym",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "has_restaurant",
+            "required": false,
+            "in": "query",
+            "description": "Has Restaurant",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "has_parking",
+            "required": false,
+            "in": "query",
+            "description": "Has Parking",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "has_pet_friendly",
+            "required": false,
+            "in": "query",
+            "description": "Pet Friendly",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Items per page",
+            "schema": {
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort_by",
+            "required": false,
+            "in": "query",
+            "description": "Sort by field",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort_order",
+            "required": false,
+            "in": "query",
+            "description": "Sort order",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hotels retrieved successfully"
+          }
+        },
+        "summary": "Get all hotels with filtering and pagination",
+        "tags": [
+          "Hotels"
+        ]
+      }
+    },
+    "/hotels/popular": {
+      "get": {
+        "operationId": "HotelController_getPopularHotels",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Number of hotels to return",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Popular hotels retrieved successfully"
+          }
+        },
+        "summary": "Get popular hotels",
+        "tags": [
+          "Hotels"
+        ]
+      }
+    },
+    "/hotels/location/{city}": {
+      "get": {
+        "operationId": "HotelController_getHotelsByLocation",
+        "parameters": [
+          {
+            "name": "city",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Number of hotels to return",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hotels retrieved successfully"
+          }
+        },
+        "summary": "Get hotels by city",
+        "tags": [
+          "Hotels"
+        ]
+      }
+    },
+    "/hotels/price-range": {
+      "get": {
+        "operationId": "HotelController_getHotelsByPriceRange",
+        "parameters": [
+          {
+            "name": "min_price",
+            "required": true,
+            "in": "query",
+            "description": "Minimum price",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "max_price",
+            "required": true,
+            "in": "query",
+            "description": "Maximum price",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Number of hotels to return",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hotels retrieved successfully"
+          }
+        },
+        "summary": "Get hotels by price range",
+        "tags": [
+          "Hotels"
+        ]
+      }
+    },
+    "/hotels/amenities": {
+      "get": {
+        "operationId": "HotelController_getHotelsByAmenities",
+        "parameters": [
+          {
+            "name": "amenities",
+            "required": true,
+            "in": "query",
+            "description": "Comma-separated list of amenities",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Number of hotels to return",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hotels retrieved successfully"
+          }
+        },
+        "summary": "Get hotels by amenities",
+        "tags": [
+          "Hotels"
+        ]
+      }
+    },
+    "/hotels/{id}": {
+      "get": {
+        "operationId": "HotelController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hotel retrieved successfully"
+          },
+          "404": {
+            "description": "Hotel not found"
+          }
+        },
+        "summary": "Get hotel by ID",
+        "tags": [
+          "Hotels"
+        ]
+      },
+      "patch": {
+        "operationId": "HotelController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateHotelDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Hotel updated successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Hotel not found"
+          }
+        },
+        "summary": "Update hotel (Admin only)",
+        "tags": [
+          "Hotels"
+        ]
+      },
+      "delete": {
+        "operationId": "HotelController_deleteHotel",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hotel deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Hotel not found"
+          }
+        },
+        "summary": "Delete hotel (Admin only)",
+        "tags": [
+          "Hotels"
+        ]
+      }
     }
   },
   "info": {
@@ -1237,6 +1681,241 @@
             "type": "string",
             "example": "create",
             "description": "Action name"
+          }
+        }
+      },
+      "CreateHotelDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Hotel name"
+          },
+          "description": {
+            "type": "string",
+            "description": "Hotel description"
+          },
+          "location": {
+            "type": "string",
+            "description": "Hotel location"
+          },
+          "city": {
+            "type": "string",
+            "description": "City"
+          },
+          "country": {
+            "type": "string",
+            "description": "Country"
+          },
+          "price": {
+            "type": "number",
+            "description": "Price per night"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency code",
+            "default": "USD"
+          },
+          "rating": {
+            "type": "number",
+            "description": "Hotel rating (0-5)",
+            "minimum": 0,
+            "maximum": 5
+          },
+          "star_rating": {
+            "type": "number",
+            "description": "Star rating (1-5)",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "amenities": {
+            "description": "Hotel amenities",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "images": {
+            "description": "Hotel images URLs",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "has_wifi": {
+            "type": "boolean",
+            "description": "Has WiFi"
+          },
+          "has_pool": {
+            "type": "boolean",
+            "description": "Has Pool"
+          },
+          "has_spa": {
+            "type": "boolean",
+            "description": "Has Spa"
+          },
+          "has_gym": {
+            "type": "boolean",
+            "description": "Has Gym"
+          },
+          "has_restaurant": {
+            "type": "boolean",
+            "description": "Has Restaurant"
+          },
+          "has_parking": {
+            "type": "boolean",
+            "description": "Has Parking"
+          },
+          "has_pet_friendly": {
+            "type": "boolean",
+            "description": "Pet Friendly"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Phone number"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address"
+          },
+          "website": {
+            "type": "string",
+            "description": "Website URL"
+          },
+          "address": {
+            "type": "string",
+            "description": "Address"
+          },
+          "latitude": {
+            "type": "number",
+            "description": "Latitude"
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Longitude"
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "location",
+          "city",
+          "country",
+          "price",
+          "currency",
+          "rating",
+          "star_rating"
+        ]
+      },
+      "UpdateHotelDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Hotel name"
+          },
+          "description": {
+            "type": "string",
+            "description": "Hotel description"
+          },
+          "location": {
+            "type": "string",
+            "description": "Hotel location"
+          },
+          "city": {
+            "type": "string",
+            "description": "City"
+          },
+          "country": {
+            "type": "string",
+            "description": "Country"
+          },
+          "price": {
+            "type": "number",
+            "description": "Price per night"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency code",
+            "default": "USD"
+          },
+          "rating": {
+            "type": "number",
+            "description": "Hotel rating (0-5)",
+            "minimum": 0,
+            "maximum": 5
+          },
+          "star_rating": {
+            "type": "number",
+            "description": "Star rating (1-5)",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "amenities": {
+            "description": "Hotel amenities",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "images": {
+            "description": "Hotel images URLs",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "has_wifi": {
+            "type": "boolean",
+            "description": "Has WiFi"
+          },
+          "has_pool": {
+            "type": "boolean",
+            "description": "Has Pool"
+          },
+          "has_spa": {
+            "type": "boolean",
+            "description": "Has Spa"
+          },
+          "has_gym": {
+            "type": "boolean",
+            "description": "Has Gym"
+          },
+          "has_restaurant": {
+            "type": "boolean",
+            "description": "Has Restaurant"
+          },
+          "has_parking": {
+            "type": "boolean",
+            "description": "Has Parking"
+          },
+          "has_pet_friendly": {
+            "type": "boolean",
+            "description": "Pet Friendly"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Phone number"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address"
+          },
+          "website": {
+            "type": "string",
+            "description": "Website URL"
+          },
+          "address": {
+            "type": "string",
+            "description": "Address"
+          },
+          "latitude": {
+            "type": "number",
+            "description": "Latitude"
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Longitude"
           }
         }
       }

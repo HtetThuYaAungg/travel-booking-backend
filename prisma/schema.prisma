@@ -60,6 +60,10 @@ model User {
   updated_departments Department[] @relation("department_updated_by")
   deleted_departments Department[] @relation("department_deleted_by")
 
+  created_hotels Hotel[] @relation("hotel_created_by")
+  updated_hotels Hotel[] @relation("hotel_updated_by")
+  deleted_hotels Hotel[] @relation("hotel_deleted_by")
+
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
   deleted_at DateTime?
@@ -164,4 +168,53 @@ model Department {
   updated_at DateTime  @updatedAt
   deleted_at DateTime?
   @@unique([department_code, deleted_at], name: "unique_department_code_deleted")
+}
+
+model Hotel {
+  id          String @id @default(uuid())
+  name        String
+  description String
+  location    String
+  city        String
+  country     String
+  price       Float
+  currency    String  @default("USD")
+  rating      Int     @default(0)
+  star_rating Int     @default(1)
+  amenities   Json?   // Array of amenities like ["WiFi", "Pool", "Spa", "Gym"]
+  images      Json?   // Array of image URLs
+  status      Status  @default(ACTIVE)
+
+  // Hotel features
+  has_wifi        Boolean @default(false)
+  has_pool        Boolean @default(false)
+  has_spa         Boolean @default(false)
+  has_gym         Boolean @default(false)
+  has_restaurant  Boolean @default(false)
+  has_parking     Boolean @default(false)
+  has_pet_friendly Boolean @default(false)
+
+  // Contact information
+  phone    String?
+  email    String?
+  website  String?
+  address  String?
+
+  // Geolocation
+  latitude  Float?
+  longitude Float?
+
+  created_by_id String?
+  created_by    User?   @relation("hotel_created_by", fields: [created_by_id], references: [id])
+
+  updated_by_id String?
+  updated_by    User?   @relation("hotel_updated_by", fields: [updated_by_id], references: [id])
+
+  deleted_by_id String?
+  deleted_by    User?   @relation("hotel_deleted_by", fields: [deleted_by_id], references: [id])
+
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+  @@unique([name, location, deleted_at], name: "unique_hotel_name_location_deleted")
 }

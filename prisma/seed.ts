@@ -156,6 +156,38 @@ async function main() {
         module: 'permissions',
         action: 'list',
       },
+
+      // Hotel permissions
+      {
+        name: 'hotels:create',
+        description: 'Create hotels',
+        module: 'hotels',
+        action: 'create',
+      },
+      {
+        name: 'hotels:read',
+        description: 'View hotels',
+        module: 'hotels',
+        action: 'read',
+      },
+      {
+        name: 'hotels:update',
+        description: 'Update hotels',
+        module: 'hotels',
+        action: 'update',
+      },
+      {
+        name: 'hotels:delete',
+        description: 'Delete hotels',
+        module: 'hotels',
+        action: 'delete',
+      },
+      {
+        name: 'hotels:list',
+        description: 'List hotels',
+        module: 'hotels',
+        action: 'list',
+      },
     ];
 
     for (const permission of permissions) {
@@ -234,6 +266,16 @@ async function main() {
                     read: true,
                   },
                 },
+                {
+                  menuName: 'Hotels',
+                  actions: {
+                    create: true,
+                    delete: true,
+                    update: true,
+                    list: true,
+                    read: true,
+                  },
+                },
               ],
             },
           ],
@@ -291,6 +333,208 @@ async function main() {
       });
     }
     console.log('✅ System User created Successfully:');
+
+    // 7. Seed hotel data
+    console.log('🏨 Seeding hotel data...');
+    
+    const hotels = [
+      {
+        name: 'Grand Palace Hotel',
+        description: 'Luxurious 5-star hotel in the heart of the city with stunning views and world-class amenities. Experience unparalleled comfort and service.',
+        location: 'Downtown',
+        city: 'Yangon',
+        country: 'Myanmar',
+        price: 250.00,
+        currency: 'USD',
+        rating: 4.8,
+        star_rating: 5,
+        amenities: ['WiFi', 'Pool', 'Spa', 'Gym', 'Restaurant', 'Parking'],
+        images: [
+          'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800',
+          'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800'
+        ],
+        has_wifi: true,
+        has_pool: true,
+        has_spa: true,
+        has_gym: true,
+        has_restaurant: true,
+        has_parking: true,
+        has_pet_friendly: false,
+        phone: '+95-1-234-5678',
+        email: 'info@grandpalace.com',
+        website: 'https://grandpalace.com',
+        address: '123 Downtown Street, Yangon, Myanmar',
+        latitude: 16.8661,
+        longitude: 96.1951,
+      },
+      {
+        name: 'Riverside Resort',
+        description: 'Peaceful riverside retreat with beautiful gardens and spa facilities. Perfect for relaxation and rejuvenation.',
+        location: 'Riverside',
+        city: 'Mandalay',
+        country: 'Myanmar',
+        price: 180.00,
+        currency: 'USD',
+        rating: 4.5,
+        star_rating: 4,
+        amenities: ['WiFi', 'Pool', 'Spa', 'Restaurant', 'Parking'],
+        images: [
+          'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800',
+          'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800'
+        ],
+        has_wifi: true,
+        has_pool: true,
+        has_spa: true,
+        has_gym: false,
+        has_restaurant: true,
+        has_parking: true,
+        has_pet_friendly: true,
+        phone: '+95-2-345-6789',
+        email: 'info@riverside.com',
+        website: 'https://riverside.com',
+        address: '456 Riverside Road, Mandalay, Myanmar',
+        latitude: 21.9588,
+        longitude: 96.0891,
+      },
+      {
+        name: 'City Center Inn',
+        description: 'Modern boutique hotel with contemporary design and excellent location. Walking distance to major attractions.',
+        location: 'City Center',
+        city: 'Yangon',
+        country: 'Myanmar',
+        price: 120.00,
+        currency: 'USD',
+        rating: 4.2,
+        star_rating: 3,
+        amenities: ['WiFi', 'Restaurant', 'Parking'],
+        images: [
+          'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800',
+          'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800'
+        ],
+        has_wifi: true,
+        has_pool: false,
+        has_spa: false,
+        has_gym: false,
+        has_restaurant: true,
+        has_parking: true,
+        has_pet_friendly: false,
+        phone: '+95-1-456-7890',
+        email: 'info@citycenter.com',
+        website: 'https://citycenter.com',
+        address: '789 City Center, Yangon, Myanmar',
+        latitude: 16.8661,
+        longitude: 96.1951,
+      },
+      {
+        name: 'Mountain View Lodge',
+        description: 'Scenic mountain lodge offering breathtaking views and outdoor activities. Perfect for nature lovers and adventure seekers.',
+        location: 'Shan Hills',
+        city: 'Kalaw',
+        country: 'Myanmar',
+        price: 95.00,
+        currency: 'USD',
+        rating: 4.6,
+        star_rating: 4,
+        amenities: ['WiFi', 'Restaurant', 'Parking'],
+        images: [
+          'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800',
+          'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800'
+        ],
+        has_wifi: true,
+        has_pool: false,
+        has_spa: false,
+        has_gym: false,
+        has_restaurant: true,
+        has_parking: true,
+        has_pet_friendly: true,
+        phone: '+95-81-234-5678',
+        email: 'info@mountainview.com',
+        website: 'https://mountainview.com',
+        address: '321 Mountain Road, Kalaw, Myanmar',
+        latitude: 20.6221,
+        longitude: 96.5689,
+      },
+      {
+        name: 'Beach Paradise Resort',
+        description: 'Tropical beachfront resort with pristine white sand beaches and crystal clear waters. Ultimate beach vacation destination.',
+        location: 'Ngapali Beach',
+        city: 'Ngapali',
+        country: 'Myanmar',
+        price: 320.00,
+        currency: 'USD',
+        rating: 4.9,
+        star_rating: 5,
+        amenities: ['WiFi', 'Pool', 'Spa', 'Gym', 'Restaurant', 'Parking'],
+        images: [
+          'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800',
+          'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800'
+        ],
+        has_wifi: true,
+        has_pool: true,
+        has_spa: true,
+        has_gym: true,
+        has_restaurant: true,
+        has_parking: true,
+        has_pet_friendly: false,
+        phone: '+95-43-234-5678',
+        email: 'info@beachparadise.com',
+        website: 'https://beachparadise.com',
+        address: '654 Beach Road, Ngapali, Myanmar',
+        latitude: 18.4500,
+        longitude: 94.3000,
+      },
+      {
+        name: 'Heritage Boutique Hotel',
+        description: 'Charming heritage hotel with traditional architecture and modern comforts. Rich cultural experience in historic setting.',
+        location: 'Old Bagan',
+        city: 'Bagan',
+        country: 'Myanmar',
+        price: 160.00,
+        currency: 'USD',
+        rating: 4.7,
+        star_rating: 4,
+        amenities: ['WiFi', 'Restaurant', 'Parking'],
+        images: [
+          'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800',
+          'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800'
+        ],
+        has_wifi: true,
+        has_pool: false,
+        has_spa: false,
+        has_gym: false,
+        has_restaurant: true,
+        has_parking: true,
+        has_pet_friendly: false,
+        phone: '+95-61-234-5678',
+        email: 'info@heritage.com',
+        website: 'https://heritage.com',
+        address: '987 Heritage Street, Bagan, Myanmar',
+        latitude: 21.1722,
+        longitude: 94.8602,
+      },
+    ];
+
+    for (const hotelData of hotels) {
+      const existingHotel = await prisma.hotel.findFirst({
+        where: {
+          name: hotelData.name,
+          location: hotelData.location,
+          deleted_at: null,
+        },
+      });
+
+      if (!existingHotel) {
+        await prisma.hotel.create({
+          data: {
+            ...hotelData,
+            created_by_id: user.id,
+          },
+        });
+        console.log(`✅ Hotel created: ${hotelData.name}`);
+      }
+    }
+
+    console.log('✅ Hotel data seeded successfully!');
   } catch (error) {
     console.error('❌ Error seeding data:', error);
     throw error;

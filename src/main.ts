@@ -42,7 +42,11 @@ const configureGlobalSettings = (app: INestApplication<any>) => {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalFilters(new PrismaExceptionFilter());
   app.useLogger(new Logger());
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({
+    transform: true,
+    whitelist: true,
+    forbidNonWhitelisted: true,
+  }));
 };
 
 const configureSwagger = (app: INestApplication<any>) => {

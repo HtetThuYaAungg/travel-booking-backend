@@ -19,6 +19,7 @@ import { DepartmentModule } from './modules/department/department.module';
 import { UserModule } from './modules/user/user.module';
 import { CollectionCountModule } from './modules/collection-count/collection-count.module';
 import { PermissionModule } from './modules/permission/permission.module';
+import { HotelModule } from './modules/hotel/hotel.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
@@ -43,6 +44,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     DepartmentModule,
     CollectionCountModule,
     PermissionModule,
+    HotelModule,
 
   ],
   controllers: [AppController],
