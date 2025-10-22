@@ -1,0 +1,1250 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "AppController_getHello",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "App"
+        ]
+      }
+    },
+    "/swagger.json": {
+      "get": {
+        "operationId": "AppController_getJson",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "App"
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User logged in successfully"
+          }
+        },
+        "summary": "Login user",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "operationId": "AuthController_logout",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "User logged out successfully"
+          }
+        },
+        "summary": "Logout user",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/user/refresh-token": {
+      "post": {
+        "operationId": "UserController_refreshToken",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Access new refresh token"
+          }
+        },
+        "summary": "Refreshing new token",
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/user/register": {
+      "post": {
+        "operationId": "UserController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully"
+          }
+        },
+        "summary": "Register a new user",
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/user/permissions": {
+      "get": {
+        "operationId": "UserController_getUserPermissions",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "User Permissions"
+          }
+        },
+        "summary": "Get user permission by ID",
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/user/all": {
+      "get": {
+        "operationId": "UserController_getAllUsers",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          },
+          {
+            "name": "end_date",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          },
+          {
+            "name": "start_date",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          },
+          {
+            "name": "role_code",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          },
+          {
+            "name": "department_code",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          },
+          {
+            "name": "staff_id",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          },
+          {
+            "name": "email",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          },
+          {
+            "name": "full_name",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of users"
+          }
+        },
+        "summary": "Get all users with filters",
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/user/profile": {
+      "get": {
+        "operationId": "UserController_getCurrentUserProfile",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "User Profile"
+          }
+        },
+        "summary": "Get a user profile",
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/user/me/change-password": {
+      "post": {
+        "operationId": "UserController_changePassword",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password changed successfully"
+          }
+        },
+        "summary": "Change current user password",
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "operationId": "UserController_getUserById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User details"
+          }
+        },
+        "summary": "Get a user by ID",
+        "tags": [
+          "User"
+        ]
+      },
+      "patch": {
+        "operationId": "UserController_updateUser",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated successfully"
+          }
+        },
+        "summary": "Update a user",
+        "tags": [
+          "User"
+        ]
+      },
+      "delete": {
+        "operationId": "UserController_deleteUser",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted successfully"
+          }
+        },
+        "summary": "Delete a user",
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/role/new": {
+      "post": {
+        "operationId": "RoleController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRoleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Role created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleEntity"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Create a new Role",
+        "tags": [
+          "Role"
+        ]
+      }
+    },
+    "/role/all": {
+      "get": {
+        "operationId": "RoleController_getAllRoles",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          },
+          {
+            "name": "end_date",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          },
+          {
+            "name": "start_date",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          },
+          {
+            "name": "role_code",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          },
+          {
+            "name": "role_name",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of roles"
+          }
+        },
+        "summary": "Get all roles with filters",
+        "tags": [
+          "Role"
+        ]
+      }
+    },
+    "/role/common/all": {
+      "get": {
+        "operationId": "RoleController_getCommonRoles",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List common of roles"
+          }
+        },
+        "summary": "Get all common roles",
+        "tags": [
+          "Role"
+        ]
+      }
+    },
+    "/role/{id}": {
+      "get": {
+        "operationId": "RoleController_getRoleById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Role details"
+          }
+        },
+        "summary": "Get a role by ID",
+        "tags": [
+          "Role"
+        ]
+      },
+      "patch": {
+        "operationId": "RoleController_updateRole",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRoleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Role updated successfully"
+          }
+        },
+        "summary": "Update a role",
+        "tags": [
+          "Role"
+        ]
+      },
+      "delete": {
+        "operationId": "RoleController_deleteRole",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Role deleted successfully"
+          }
+        },
+        "summary": "Delete a role",
+        "tags": [
+          "Role"
+        ]
+      }
+    },
+    "/role/{id}/permissions": {
+      "get": {
+        "operationId": "RoleController_getRolePermissions",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Role permissions retrieved successfully"
+          }
+        },
+        "summary": "Get permissions for a role",
+        "tags": [
+          "Role"
+        ]
+      }
+    },
+    "/department/new": {
+      "post": {
+        "operationId": "DepartmentController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDepartmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Department created successfully"
+          }
+        },
+        "summary": "Create a new Department",
+        "tags": [
+          "Department"
+        ]
+      }
+    },
+    "/department/all": {
+      "get": {
+        "operationId": "DepartmentController_getAllDepartments",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          },
+          {
+            "name": "end_date",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          },
+          {
+            "name": "start_date",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          },
+          {
+            "name": "department_code",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          },
+          {
+            "name": "department_name",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of departments"
+          }
+        },
+        "summary": "Get all departments with filters",
+        "tags": [
+          "Department"
+        ]
+      }
+    },
+    "/department/common/all": {
+      "get": {
+        "operationId": "DepartmentController_getCommonDepartments",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List common of Department"
+          }
+        },
+        "summary": "Get all common departments",
+        "tags": [
+          "Department"
+        ]
+      }
+    },
+    "/department/{id}": {
+      "get": {
+        "operationId": "DepartmentController_getDepartmentById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Department details"
+          }
+        },
+        "summary": "Get a department by ID",
+        "tags": [
+          "Department"
+        ]
+      },
+      "patch": {
+        "operationId": "DepartmentController_updateDepartment",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDepartmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Department updated successfully"
+          }
+        },
+        "summary": "Update a department",
+        "tags": [
+          "Department"
+        ]
+      },
+      "delete": {
+        "operationId": "DepartmentController_deleteDepartment",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Department deleted successfully"
+          }
+        },
+        "summary": "Delete a department",
+        "tags": [
+          "Department"
+        ]
+      }
+    },
+    "/permission/new": {
+      "post": {
+        "operationId": "PermissionController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePermissionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Permission created successfully"
+          }
+        },
+        "summary": "Create a new permission",
+        "tags": [
+          "Permission"
+        ]
+      }
+    },
+    "/permission/all": {
+      "get": {
+        "operationId": "PermissionController_findAll",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "name",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "module",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "action",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "end_date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Permissions retrieved successfully"
+          }
+        },
+        "summary": "Get all permissions with pagination",
+        "tags": [
+          "Permission"
+        ]
+      }
+    },
+    "/permission/modules": {
+      "get": {
+        "operationId": "PermissionController_getAllModules",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Modules retrieved successfully"
+          }
+        },
+        "summary": "Get all modules",
+        "tags": [
+          "Permission"
+        ]
+      }
+    },
+    "/permission/module/{module}": {
+      "get": {
+        "operationId": "PermissionController_getPermissionsByModule",
+        "parameters": [
+          {
+            "name": "module",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Permissions retrieved successfully"
+          }
+        },
+        "summary": "Get permissions by module",
+        "tags": [
+          "Permission"
+        ]
+      }
+    },
+    "/permission/{id}": {
+      "get": {
+        "operationId": "PermissionController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Permission retrieved successfully"
+          }
+        },
+        "summary": "Get permission by ID",
+        "tags": [
+          "Permission"
+        ]
+      },
+      "patch": {
+        "operationId": "PermissionController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePermissionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Permission updated successfully"
+          }
+        },
+        "summary": "Update permission",
+        "tags": [
+          "Permission"
+        ]
+      },
+      "delete": {
+        "operationId": "PermissionController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Permission deleted successfully"
+          }
+        },
+        "summary": "Delete permission",
+        "tags": [
+          "Permission"
+        ]
+      }
+    },
+    "/counts": {
+      "get": {
+        "operationId": "CollectionCountController_getAllCounts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get counts for user,role and department",
+        "tags": [
+          "CollectionCount"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Travel Booking API Documentation",
+    "description": "API documentation for Travel Booking",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "jwt": {
+        "scheme": "Bearer",
+        "bearerFormat": "Bearer",
+        "description": "[just text field] Please enter token in following format: Bearer <JWT>",
+        "name": "Authorization",
+        "type": "http",
+        "in": "Header"
+      }
+    },
+    "schemas": {
+      "LoginUserDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "admin@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "Admin@123"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "RefreshTokenDto": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "refreshToken"
+        ]
+      },
+      "CreateUserDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "johndoe@gmail.com"
+          },
+          "staff_id": {
+            "type": "string",
+            "example": "user123"
+          },
+          "full_name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "password": {
+            "type": "string",
+            "example": "securepassword"
+          },
+          "confirm_password": {
+            "type": "string",
+            "example": "securepassword"
+          },
+          "status": {
+            "type": "string",
+            "example": "Active",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE",
+              "DELETE"
+            ],
+            "default": "ACTIVE"
+          },
+          "user_type": {
+            "type": "string",
+            "example": "Maker",
+            "enum": [
+              "MAKER",
+              "CHECKER"
+            ],
+            "default": "MAKER"
+          },
+          "department_code": {
+            "type": "string",
+            "example": "dept01"
+          },
+          "role_code": {
+            "type": "string",
+            "example": "role01"
+          }
+        },
+        "required": [
+          "email",
+          "staff_id",
+          "full_name",
+          "password",
+          "confirm_password",
+          "status",
+          "user_type",
+          "department_code",
+          "role_code"
+        ]
+      },
+      "ChangePasswordDto": {
+        "type": "object",
+        "properties": {
+          "current_password": {
+            "type": "string",
+            "example": "currentpassword123"
+          },
+          "new_password": {
+            "type": "string",
+            "example": "newpassword123"
+          },
+          "confirm_new_password": {
+            "type": "string",
+            "example": "newpassword123"
+          }
+        },
+        "required": [
+          "current_password",
+          "new_password",
+          "confirm_new_password"
+        ]
+      },
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "johndoe@gmail.com"
+          },
+          "staff_id": {
+            "type": "string",
+            "example": "user123"
+          },
+          "full_name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "password": {
+            "type": "string",
+            "example": "securepassword"
+          },
+          "confirm_password": {
+            "type": "string",
+            "example": "securepassword"
+          },
+          "status": {
+            "type": "string",
+            "example": "Active",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE",
+              "DELETE"
+            ],
+            "default": "ACTIVE"
+          },
+          "user_type": {
+            "type": "string",
+            "example": "Maker",
+            "enum": [
+              "MAKER",
+              "CHECKER"
+            ],
+            "default": "MAKER"
+          },
+          "department_code": {
+            "type": "string",
+            "example": "dept01"
+          },
+          "role_code": {
+            "type": "string",
+            "example": "role01"
+          }
+        }
+      },
+      "PermissionDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "CreateRoleDto": {
+        "type": "object",
+        "properties": {
+          "role_code": {
+            "type": "string",
+            "example": "ROLE001"
+          },
+          "role_name": {
+            "type": "string",
+            "example": "Administrator"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PermissionDto"
+            }
+          }
+        },
+        "required": [
+          "role_code",
+          "role_name",
+          "permissions"
+        ]
+      },
+      "RoleEntity": {
+        "type": "object",
+        "properties": {}
+      },
+      "UpdateRoleDto": {
+        "type": "object",
+        "properties": {
+          "role_code": {
+            "type": "string",
+            "example": "ROLE001"
+          },
+          "role_name": {
+            "type": "string",
+            "example": "Administrator"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PermissionDto"
+            }
+          }
+        }
+      },
+      "CreateDepartmentDto": {
+        "type": "object",
+        "properties": {
+          "department_code": {
+            "type": "string",
+            "example": "IT"
+          },
+          "department_name": {
+            "type": "string",
+            "example": "Information Technology"
+          }
+        },
+        "required": [
+          "department_code",
+          "department_name"
+        ]
+      },
+      "UpdateDepartmentDto": {
+        "type": "object",
+        "properties": {
+          "department_code": {
+            "type": "string",
+            "example": "IT"
+          },
+          "department_name": {
+            "type": "string",
+            "example": "Information Technology"
+          }
+        }
+      },
+      "CreatePermissionDto": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "example": "Create users",
+            "description": "Permission description"
+          },
+          "module": {
+            "type": "string",
+            "example": "users",
+            "description": "Module name"
+          },
+          "action": {
+            "type": "string",
+            "example": "create",
+            "description": "Action name"
+          }
+        },
+        "required": [
+          "description",
+          "module",
+          "action"
+        ]
+      },
+      "UpdatePermissionDto": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "example": "Create users",
+            "description": "Permission description"
+          },
+          "module": {
+            "type": "string",
+            "example": "users",
+            "description": "Module name"
+          },
+          "action": {
+            "type": "string",
+            "example": "create",
+            "description": "Action name"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "jwt": []
+    }
+  ]
+}

@@ -1,0 +1,167 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  DELETE
+}
+
+enum UserType {
+  MAKER
+  CHECKER
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String
+  staff_id      String
+  role_id       String
+  department_id String
+  full_name     String
+  password      String
+  user_type     UserType @default(MAKER)
+  status        Status   @default(ACTIVE)
+
+  role       Role       @relation("user_role", fields: [role_id], references: [id])
+  department Department @relation("user_department", fields: [department_id], references: [id])
+
+  created_by_id String?
+  created_by    User?   @relation("user_created_by", fields: [created_by_id], references: [id])
+  created_users User[]  @relation("user_created_by")
+
+  updated_by_id String?
+  updated_by    User?   @relation("user_updated_by", fields: [updated_by_id], references: [id])
+  updated_users User[]  @relation("user_updated_by")
+
+  deleted_by_id String?
+  deleted_by    User?   @relation("user_deleted_by", fields: [deleted_by_id], references: [id])
+  deleted_users User[]  @relation("user_deleted_by")
+
+  created_roles Role[] @relation("role_created_by")
+  updated_roles Role[] @relation("role_updated_by")
+  deleted_roles Role[] @relation("role_deleted_by")
+
+  created_permissions Permission[] @relation("permission_created_by")
+  updated_permissions Permission[] @relation("permission_updated_by")
+  deleted_permissions Permission[] @relation("permission_deleted_by")
+
+  created_role_permissions RolePermission[] @relation("role_permission_created_by")
+  updated_role_permissions RolePermission[] @relation("role_permission_updated_by")
+  deleted_role_permissions RolePermission[] @relation("role_permission_deleted_by")
+
+  created_departments Department[] @relation("department_created_by")
+  updated_departments Department[] @relation("department_updated_by")
+  deleted_departments Department[] @relation("department_deleted_by")
+
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+  @@unique([email, deleted_at], name: "unique_email_deleted")
+  @@unique([staff_id, deleted_at], name: "unique_staff_id_deleted")
+}
+
+model Role {
+  id          String @id @default(uuid())
+  role_code   String
+  role_name   String
+  permissions Json
+  status      Status @default(ACTIVE)
+
+  users User[] @relation("user_role")
+
+  role_permissions RolePermission[] @relation("role_to_role_permission")
+
+  created_by_id String?
+  created_by    User?   @relation("role_created_by", fields: [created_by_id], references: [id])
+
+  updated_by_id String?
+  updated_by    User?   @relation("role_updated_by", fields: [updated_by_id], references: [id])
+
+  deleted_by_id String?
+  deleted_by    User?   @relation("role_deleted_by", fields: [deleted_by_id], references: [id])
+
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+  @@unique([role_code, deleted_at], name: "unique_role_code_deleted")
+}
+
+model Permission {
+  id          String  @id @default(uuid())
+  name        String  
+  description String?
+  module      String
+  action      String
+  status      Status  @default(ACTIVE)
+
+  role_permissions RolePermission[] @relation("permission_to_role_permission")
+
+  created_by_id String?
+  created_by    User?   @relation("permission_created_by", fields: [created_by_id], references: [id])
+
+  updated_by_id String?
+  updated_by    User?   @relation("permission_updated_by", fields: [updated_by_id], references: [id])
+
+  deleted_by_id String?
+  deleted_by    User?   @relation("permission_deleted_by", fields: [deleted_by_id], references: [id])
+
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+  @@unique([module, action, deleted_at], name: "unique_module_action_deleted")
+}
+
+model RolePermission {
+  id            String @id @default(uuid())
+  role_id       String
+  permission_id String
+  status        Status @default(ACTIVE)
+
+  // Relations
+  role       Role       @relation("role_to_role_permission", fields: [role_id], references: [id])
+  permission Permission @relation("permission_to_role_permission", fields: [permission_id], references: [id])
+
+  created_by_id String?
+  created_by    User?   @relation("role_permission_created_by", fields: [created_by_id], references: [id])
+
+  updated_by_id String?
+  updated_by    User?   @relation("role_permission_updated_by", fields: [updated_by_id], references: [id])
+
+  deleted_by_id String?
+  deleted_by    User?   @relation("role_permission_deleted_by", fields: [deleted_by_id], references: [id])
+
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+
+  @@unique([role_id, permission_id])
+}
+
+model Department {
+  id              String @id @default(uuid())
+  department_code String
+  department_name String
+  status          Status @default(ACTIVE)
+  users User[] @relation("user_department")
+
+  created_by_id String?
+  created_by    User?   @relation("department_created_by", fields: [created_by_id], references: [id])
+
+  updated_by_id String?
+  updated_by    User?   @relation("department_updated_by", fields: [updated_by_id], references: [id])
+
+  deleted_by_id String?
+  deleted_by    User?   @relation("department_deleted_by", fields: [deleted_by_id], references: [id])
+
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+  @@unique([department_code, deleted_at], name: "unique_department_code_deleted")
+}

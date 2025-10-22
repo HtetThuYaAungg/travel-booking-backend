@@ -1,0 +1,31 @@
+
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: treasury-postgres-development
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    env_file:
+      - ../../.env
+    volumes:
+      - treasury_postgres_development_data:/var/lib/postgresql/data
+
+  app:
+    image: treasury-backend-development:latest
+    build:
+      context: ../../
+      dockerfile: docker/Dockerfile
+    container_name: treasury-backend-development
+    ports:
+      - '3002:3002'
+    depends_on:
+      - postgres
+    env_file:
+      - ../../.env
+    restart: unless-stopped
+
+volumes:
+  treasury_postgres_development_data:

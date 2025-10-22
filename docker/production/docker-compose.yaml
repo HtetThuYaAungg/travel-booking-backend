@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  app:
+    image: treasury-backend-production:latest
+    build:
+      context: ../../
+      dockerfile: docker/Dockerfile
+    container_name: treasury-backend-production
+    ports:
+      - '3002:3002'
+    env_file:
+      - ../../.env
+    restart: unless-stopped
