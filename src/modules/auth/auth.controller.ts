@@ -37,7 +37,7 @@ export class AuthController {
       await this.authService.login(loginUserDto);
     const envMode = process.env.NODE_ENV?.trim();
 
-    res.cookie(`access_token_${envMode}`, accessToken, {
+    res.cookie(`portal_access_token_${envMode}`, accessToken, {
       httpOnly: true,
       secure: envMode === 'production',
       domain:
@@ -47,7 +47,7 @@ export class AuthController {
       sameSite: envMode === 'production' ? 'none' : 'lax',
     });
 
-    res.cookie(`refresh_token_${envMode}`, refreshToken, {
+    res.cookie(`portal_refresh_token_${envMode}`, refreshToken, {
       httpOnly: true,
       secure: envMode === 'production',
       domain:
@@ -72,7 +72,7 @@ export class AuthController {
   ): Promise<{ message: string }> {
     const envMode = process.env.NODE_ENV?.trim();
 
-    res.clearCookie(`access_token_${envMode}`, {
+    res.clearCookie(`portal_access_token_${envMode}`, {
       httpOnly: true,
       secure: envMode === 'production',
       domain:
@@ -82,7 +82,7 @@ export class AuthController {
       sameSite: envMode === 'production' ? 'none' : 'lax',
     });
 
-    res.clearCookie(`refresh_token_${envMode}`, {
+    res.clearCookie(`portal_refresh_token_${envMode}`, {
       httpOnly: true,
       secure: envMode === 'production',
       domain:
