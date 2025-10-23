@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateHotelDto } from './dto/create-hotel.dto';
 import { UpdateHotelDto } from './dto/update-hotel.dto';
@@ -9,7 +13,11 @@ import { UserService } from '../user/user.service';
 
 @Injectable()
 export class HotelService {
-  constructor(private prisma: PrismaService, private userService: UserService, private prismaService: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private userService: UserService,
+    private prismaService: PrismaService,
+  ) {}
 
   async create(createHotelDto: CreateHotelDto, userId: string): Promise<Hotel> {
     try {

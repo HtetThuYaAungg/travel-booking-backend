@@ -7,7 +7,7 @@ export class UserEntity implements User {
   full_name: string;
   user_type: UserType;
   @Exclude()
-  password: string;
+  password: string | null;
   status: Status;
   id: string;
   role_id: string;
@@ -18,6 +18,12 @@ export class UserEntity implements User {
   created_at: Date;
   updated_at: Date;
   deleted_at: Date | null;
+  
+  // Google OAuth fields
+  google_id: string | null;
+  google_email: string | null;
+  avatar_url: string | null;
+  provider: string | null;
 
   constructor(partial: Partial<UserEntity>) {
     Object.assign(this, partial);

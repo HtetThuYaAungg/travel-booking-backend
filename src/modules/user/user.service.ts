@@ -335,6 +335,9 @@ export class UserService {
         'New password and confirm password do not match',
       );
     }
+    if (!currentUser.password) {
+      throw new BadRequestException('Password not set for this user');
+    }
     await this.verifyPassword(currentUser.password, current_password);
     const hashedNewPassword = await this.hashPassword(new_password);
     await this.prismaService.user.update({
@@ -373,6 +376,11 @@ export class UserService {
     });
     if (!user) {
       throw new BadRequestException('Check your email or password');
+    }
+    if (!user.password) {
+      throw new BadRequestException(
+        'This account uses Google login. Please use Google to sign in.',
+      );
     }
     return user;
   }
@@ -491,5 +499,97 @@ export class UserService {
     });
 
     return { accessToken, refreshToken };
+  }
+
+  // Google OAuth methods
+  public async findUserByGoogleId(googleId: string): Promise<User | null> {
+    return this.prismaService.user.findFirst({
+      where: {
+        google_id: googleId,
+        status: { not: Status.DELETE },
+      },
+      include: {
+        role: true,
+        department: true,
+      },
+    });
+  }
+
+  public async findUserByGoogleEmail(
+    googleEmail: string,
+  ): Promise<User | null> {
+    return this.prismaService.user.findFirst({
+      where: {
+        google_email: googleEmail,
+        status: { not: Status.DELETE },
+      },
+      include: {
+        role: true,
+        department: true,
+      },
+    });
+  }
+
+  public async createGoogleUser(googleUserData: {
+    googleId: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    picture?: string;
+  }): Promise<User> {
+    const defaultRole = await this.roleService.getRoleByCode('USER');
+    const defaultDepartment =
+      await this.departmentService.getDepartmentByCode('DEFAULT');
+
+    const fullName = `${googleUserData.firstName} ${googleUserData.lastName}`;
+    const staffId = `GOOGLE_${googleUserData.googleId}`;
+
+    return this.prismaService.user.create({
+      data: {
+        email: googleUserData.email,
+        staff_id: staffId,
+        full_name: fullName,
+        google_id: googleUserData.googleId,
+        google_email: googleUserData.email,
+        avatar_url: googleUserData.picture,
+        provider: 'google',
+        role_id: defaultRole.id,
+        department_id: defaultDepartment.id,
+        status: Status.ACTIVE,
+        user_type: UserType.MAKER,
+      },
+      include: {
+        role: true,
+        department: true,
+      },
+    });
+  }
+
+  public async updateGoogleUser(
+    userId: string,
+    googleUserData: {
+      googleId: string;
+      email: string;
+      firstName: string;
+      lastName: string;
+      picture?: string;
+    },
+  ): Promise<User> {
+    const fullName = `${googleUserData.firstName} ${googleUserData.lastName}`;
+
+    return this.prismaService.user.update({
+      where: { id: userId },
+      data: {
+        google_id: googleUserData.googleId,
+        google_email: googleUserData.email,
+        avatar_url: googleUserData.picture,
+        full_name: fullName,
+        provider: 'google',
+      },
+      include: {
+        role: true,
+        department: true,
+      },
+    });
   }
 }

@@ -7,15 +7,15 @@ async function main() {
   console.log('🌱 Seeding SYSTEM user with unlimited permissions...\n');
 
   try {
-    // 1. Create a department first (required for user)
-    let department = await prisma.department.findFirst({
+    // 1. Create departments first (required for user)
+    let adminDepartment = await prisma.department.findFirst({
       where: {
         department_code: 'ADMIN',
         status: 'ACTIVE',
       },
     });
-    if (!department) {
-      department = await prisma.department.create({
+    if (!adminDepartment) {
+      adminDepartment = await prisma.department.create({
         data: {
           department_code: 'ADMIN',
           department_name: 'Administration',
@@ -23,7 +23,25 @@ async function main() {
         },
       });
     }
-    console.log('✅ Department created:', department.department_name);
+    console.log('✅ Admin Department created:', adminDepartment.department_name);
+
+    // Create DEFAULT department for Google OAuth users
+    let defaultDepartment = await prisma.department.findFirst({
+      where: {
+        department_code: 'DEFAULT',
+        status: 'ACTIVE',
+      },
+    });
+    if (!defaultDepartment) {
+      defaultDepartment = await prisma.department.create({
+        data: {
+          department_code: 'DEFAULT',
+          department_name: 'Default Department',
+          status: 'ACTIVE',
+        },
+      });
+    }
+    console.log('✅ Default Department created:', defaultDepartment.department_name);
 
     //2. Create master permission data
     console.log('🔗 Seeding master permissions...');
@@ -207,17 +225,17 @@ async function main() {
 
     console.log('✅ Master permissions seeded successfully!');
 
-    // 3. Create the role
-    let role = await prisma.role.findFirst({
+    // 3. Create the roles
+    let adminRole = await prisma.role.findFirst({
       where: {
         role_code: 'ADMIN',
         status: 'ACTIVE',
       },
     });
 
-    if (!role) {
-      // If no active role exists, create a new one
-      role = await prisma.role.create({
+    if (!adminRole) {
+      // If no active admin role exists, create a new one
+      adminRole = await prisma.role.create({
         data: {
           role_code: 'ADMIN',
           role_name: 'Admin',
@@ -282,35 +300,75 @@ async function main() {
         },
       });
     }
-    console.log('✅ Role created:', role.role_name);
+    console.log('✅ Admin Role created:', adminRole.role_name);
 
-    // 4. Assign permissions to the role
+    // Create USER role for Google OAuth users
+    let userRole = await prisma.role.findFirst({
+      where: {
+        role_code: 'USER',
+        status: 'ACTIVE',
+      },
+    });
+
+    if (!userRole) {
+      userRole = await prisma.role.create({
+        data: {
+          role_code: 'USER',
+          role_name: 'User',
+          status: 'ACTIVE',
+          permissions: [
+            {
+              menuName: 'Dashboard',
+              subMenus: [
+                {
+                  menuName: 'Profile',
+                  actions: {
+                    read: true,
+                    edit: true,
+                  },
+                },
+                {
+                  menuName: 'Hotels',
+                  actions: {
+                    read: true,
+                    list: true,
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      });
+    }
+    console.log('✅ User Role created:', userRole.role_name);
+
+    // 4. Assign permissions to the admin role
     const existingPermissions = await prisma.permission.findMany({
       where: { name: { in: permissions.map((p) => p.name) } },
     });
 
-    console.log('🔗 Assigning permissions to role...');
+    console.log('🔗 Assigning permissions to admin role...');
     for (const permission of existingPermissions) {
       await prisma.rolePermission.upsert({
         where: {
           role_id_permission_id: {
-            role_id: role.id,
+            role_id: adminRole.id,
             permission_id: permission.id,
           },
         },
         update: {},
         create: {
-          role_id: role.id,
+          role_id: adminRole.id,
           permission_id: permission.id,
         },
       });
     }
-    console.log('✅ Permissions assigned to role');
+    console.log('✅ Permissions assigned to admin role');
 
     // 5. Hash password
     const hashedPassword = await bcrypt.hash('Admin@123', 10);
 
-    // 6. Create the user
+    // 6. Create the admin user
     let user = await prisma.user.findFirst({
       where: {
         email: 'admin@gmail.com',
@@ -325,8 +383,8 @@ async function main() {
           staff_id: '00001',
           full_name: 'System User',
           password: hashedPassword,
-          role_id: role.id,
-          department_id: department.id,
+          role_id: adminRole.id,
+          department_id: adminDepartment.id,
           user_type: 'CHECKER',
           status: 'ACTIVE',
         },

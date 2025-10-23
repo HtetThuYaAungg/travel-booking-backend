@@ -69,6 +69,66 @@
         ]
       }
     },
+    "/auth/logout-google": {
+      "post": {
+        "operationId": "AuthController_logoutGoogle",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "User logged out from Google successfully"
+          }
+        },
+        "summary": "Logout user from Google",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/google": {
+      "get": {
+        "operationId": "AuthController_googleAuth",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Redirects to Google OAuth"
+          }
+        },
+        "summary": "Initiate Google OAuth login",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/google/callback": {
+      "get": {
+        "operationId": "AuthController_googleAuthRedirect",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Google OAuth callback processed"
+          }
+        },
+        "summary": "Google OAuth callback",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "operationId": "AuthController_getCurrentUser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Current user profile"
+          }
+        },
+        "summary": "Get current user profile",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
     "/user/refresh-token": {
       "post": {
         "operationId": "UserController_refreshToken",

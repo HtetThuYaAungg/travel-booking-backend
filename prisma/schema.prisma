@@ -25,9 +25,15 @@ model User {
   role_id       String
   department_id String
   full_name     String
-  password      String
+  password      String?
   user_type     UserType @default(MAKER)
   status        Status   @default(ACTIVE)
+  
+  // Google OAuth fields
+  google_id     String?  @unique
+  google_email  String?
+  avatar_url    String?
+  provider      String?  @default("local") // "local" or "google"
 
   role       Role       @relation("user_role", fields: [role_id], references: [id])
   department Department @relation("user_department", fields: [department_id], references: [id])
