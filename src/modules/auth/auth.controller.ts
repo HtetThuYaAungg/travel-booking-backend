@@ -15,7 +15,6 @@ import { AuthService } from './auth.service';
 import { Response, Request } from 'express';
 import { Public } from 'src/common/decorators/public';
 import { AuthGuard } from '@nestjs/passport';
-import { GoogleAuthResponseDto } from './dto/google-auth.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -186,12 +185,12 @@ export class AuthController {
       });
 
       // Redirect to frontend with success status
-      res.redirect(`${frontendUrl}`);
+      res.redirect(`${frontendUrl}?success=true`);
       return { message: 'Authentication successful', user: user } as any;
     } catch (error) {
       console.error('Google OAuth callback error:', error);
       const frontendUrl = process.env.FRONTEND_URL as string;
-      res.redirect(`${frontendUrl}`);
+      res.redirect(`${frontendUrl}?success=false`);
       return { message: 'Authentication failed', error: error } as any;
     }
   }

@@ -23,14 +23,16 @@ import { HotelService } from './hotel.service';
 import { CreateHotelDto } from './dto/create-hotel.dto';
 import { UpdateHotelDto } from './dto/update-hotel.dto';
 import { HotelFilterDto } from './dto/hotel-filter.dto';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { Permission } from '../../common/decorators/permission.decorator';
-import { Public } from 'src/common/decorators/public';
+import { Permission } from 'src/common/decorators/permission.decorator';
 import { PaginatedResponse } from 'src/common/interceptors/response.interceptor';
 import { Hotel } from '@prisma/client';
+import { PermissionGuard } from 'src/common/guards/permission.guard';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { Public } from 'src/common/decorators/public';
 
 @ApiTags('Hotels')
 @Controller('hotels')
+@UseGuards(JwtAuthGuard, PermissionGuard)
 export class HotelController {
   constructor(private readonly hotelService: HotelService) {}
 
@@ -48,7 +50,6 @@ export class HotelController {
   }
 
   @Get()
-  @Permission('hotels:list')
   @ApiOperation({ summary: 'Get all hotels with filtering and pagination' })
   @ApiResponse({ status: 200, description: 'Hotels retrieved successfully' })
   @ApiQuery({
@@ -112,7 +113,7 @@ export class HotelController {
   }
 
   @Get('popular')
-  @Permission('hotels:list')
+  @Public()
   @ApiOperation({ summary: 'Get popular hotels' })
   @ApiResponse({
     status: 200,

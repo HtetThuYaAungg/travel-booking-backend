@@ -16,7 +16,6 @@ export class HotelService {
   constructor(
     private prisma: PrismaService,
     private userService: UserService,
-    private prismaService: PrismaService,
   ) {}
 
   async create(createHotelDto: CreateHotelDto, userId: string): Promise<Hotel> {
