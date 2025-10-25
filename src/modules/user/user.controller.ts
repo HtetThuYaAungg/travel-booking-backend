@@ -49,19 +49,48 @@ export class UserController {
       await this.userService.refreshToken(refreshTokenDto);
     const envMode = process.env.NODE_ENV?.trim();
 
-    res.cookie(`access_token_${envMode}`, accessToken, {
+    res.cookie(`portal_access_token_${envMode}`, accessToken, {
       httpOnly: true,
       secure: envMode === 'production',
-      domain:
-        envMode === 'production' ? '.example.com' : undefined,
+      domain: envMode === 'production' ? process.env.FRONTEND_PORTAL_PROD_URL : undefined,
       sameSite: envMode === 'production' ? 'none' : 'lax',
     });
 
+    res.cookie(`portal_refresh_token_${envMode}`, refreshToken, {
+      httpOnly: true,
+      secure: envMode === 'production',
+      domain: envMode === 'production' ? process.env.FRONTEND_PORTAL_PROD_URL : undefined,
+      sameSite: envMode === 'production' ? 'none' : 'lax',
+    });
+    return { message: 'Get Refresh Token Successfully' };
+  }
+
+  @Public()
+  @Post('refresh-token-google')
+  @ApiOperation({ summary: 'Refreshing new token' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Access new refresh token',
+  })
+  async refreshTokenGoogle(
+    @Body() refreshTokenDto: RefreshTokenDto,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<any> {
+    const { accessToken, refreshToken } =
+      await this.userService.refreshToken(refreshTokenDto);
+    const envMode = process.env.NODE_ENV?.trim();
+
+    res.cookie(`access_token_${envMode}`, accessToken, {
+      httpOnly: true,
+      secure: envMode === 'production',
+      domain: envMode === 'production' ? process.env.FRONTEND_PUBLIC_PROD_URL : undefined,
+      sameSite: envMode === 'production' ? 'none' : 'lax',
+    });
+    
     res.cookie(`refresh_token_${envMode}`, refreshToken, {
       httpOnly: true,
       secure: envMode === 'production',
-      domain:
-        envMode === 'production' ? '.example.com' : undefined,
+      domain: envMode === 'production' ? process.env.FRONTEND_PUBLIC_PROD_URL : undefined,
       sameSite: envMode === 'production' ? 'none' : 'lax',
     });
     return { message: 'Get Refresh Token Successfully' };

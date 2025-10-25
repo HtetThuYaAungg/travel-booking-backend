@@ -482,6 +482,7 @@ export class UserService {
       email: user.email,
       fullName: user.full_name,
       status: user.status,
+      avatar_url: user.avatar_url,
     };
 
     const payloadForRefresh = {

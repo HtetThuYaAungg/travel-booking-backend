@@ -232,7 +232,7 @@ export class HotelService {
     return deletedHotel;
   }
 
-  async getPopularHotels(limit: number = 6): Promise<Hotel[]> {
+  async getPopularHotels(limit: number = 6): Promise<PaginatedResponse<Hotel>> {
     const hotels = await this.prisma.hotel.findMany({
       where: {
         deleted_at: null,
@@ -246,7 +246,12 @@ export class HotelService {
       take: limit,
     });
 
-    return hotels;
+      return {
+        items: hotels,
+        total: hotels.length,
+        page: 1,
+        limit: hotels.length,
+      };
   }
 
   async getHotelsByLocation(

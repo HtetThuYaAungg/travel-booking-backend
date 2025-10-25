@@ -154,6 +154,31 @@
         ]
       }
     },
+    "/user/refresh-token-google": {
+      "post": {
+        "operationId": "UserController_refreshTokenGoogle",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Access new refresh token"
+          }
+        },
+        "summary": "Refreshing new token",
+        "tags": [
+          "User"
+        ]
+      }
+    },
     "/user/register": {
       "post": {
         "operationId": "UserController_register",
@@ -1431,6 +1456,864 @@
           "Hotels"
         ]
       }
+    },
+    "/hotel-bookings": {
+      "post": {
+        "operationId": "HotelBookingController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateHotelBookingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Hotel booking created successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Hotel not found"
+          }
+        },
+        "summary": "Create a new hotel booking",
+        "tags": [
+          "Hotel Bookings"
+        ]
+      },
+      "get": {
+        "operationId": "HotelBookingController_findAll",
+        "parameters": [
+          {
+            "name": "customer_name",
+            "required": false,
+            "in": "query",
+            "description": "Filter by customer name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "customer_email",
+            "required": false,
+            "in": "query",
+            "description": "Filter by customer email",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "hotel_id",
+            "required": false,
+            "in": "query",
+            "description": "Filter by hotel ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "check_in_date_from",
+            "required": false,
+            "in": "query",
+            "description": "Filter by check-in date from",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "check_in_date_to",
+            "required": false,
+            "in": "query",
+            "description": "Filter by check-in date to",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "check_out_date_from",
+            "required": false,
+            "in": "query",
+            "description": "Filter by check-out date from",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "check_out_date_to",
+            "required": false,
+            "in": "query",
+            "description": "Filter by check-out date to",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "min_guests",
+            "required": false,
+            "in": "query",
+            "description": "Filter by minimum guests",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "max_guests",
+            "required": false,
+            "in": "query",
+            "description": "Filter by maximum guests",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "min_rooms",
+            "required": false,
+            "in": "query",
+            "description": "Filter by minimum rooms",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "max_rooms",
+            "required": false,
+            "in": "query",
+            "description": "Filter by maximum rooms",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Items per page",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort_by",
+            "required": false,
+            "in": "query",
+            "description": "Sort field",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort_order",
+            "required": false,
+            "in": "query",
+            "description": "Sort order (asc/desc)",
+            "schema": {
+              "default": "desc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hotel bookings retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "summary": "Get all hotel bookings with filters",
+        "tags": [
+          "Hotel Bookings"
+        ]
+      }
+    },
+    "/hotel-bookings/my-bookings": {
+      "get": {
+        "operationId": "HotelBookingController_findMyBookings",
+        "parameters": [
+          {
+            "name": "customer_name",
+            "required": false,
+            "in": "query",
+            "description": "Filter by customer name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "customer_email",
+            "required": false,
+            "in": "query",
+            "description": "Filter by customer email",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "hotel_id",
+            "required": false,
+            "in": "query",
+            "description": "Filter by hotel ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "check_in_date_from",
+            "required": false,
+            "in": "query",
+            "description": "Filter by check-in date from",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "check_in_date_to",
+            "required": false,
+            "in": "query",
+            "description": "Filter by check-in date to",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "check_out_date_from",
+            "required": false,
+            "in": "query",
+            "description": "Filter by check-out date from",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "check_out_date_to",
+            "required": false,
+            "in": "query",
+            "description": "Filter by check-out date to",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "min_guests",
+            "required": false,
+            "in": "query",
+            "description": "Filter by minimum guests",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "max_guests",
+            "required": false,
+            "in": "query",
+            "description": "Filter by maximum guests",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "min_rooms",
+            "required": false,
+            "in": "query",
+            "description": "Filter by minimum rooms",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "max_rooms",
+            "required": false,
+            "in": "query",
+            "description": "Filter by maximum rooms",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Items per page",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort_by",
+            "required": false,
+            "in": "query",
+            "description": "Sort field",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort_order",
+            "required": false,
+            "in": "query",
+            "description": "Sort order (asc/desc)",
+            "schema": {
+              "default": "desc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User hotel bookings retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "summary": "Get current user hotel bookings",
+        "tags": [
+          "Hotel Bookings"
+        ]
+      }
+    },
+    "/hotel-bookings/pending": {
+      "get": {
+        "operationId": "HotelBookingController_findPendingBookings",
+        "parameters": [
+          {
+            "name": "customer_name",
+            "required": false,
+            "in": "query",
+            "description": "Filter by customer name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "customer_email",
+            "required": false,
+            "in": "query",
+            "description": "Filter by customer email",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "hotel_id",
+            "required": false,
+            "in": "query",
+            "description": "Filter by hotel ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "check_in_date_from",
+            "required": false,
+            "in": "query",
+            "description": "Filter by check-in date from",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "check_in_date_to",
+            "required": false,
+            "in": "query",
+            "description": "Filter by check-in date to",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "check_out_date_from",
+            "required": false,
+            "in": "query",
+            "description": "Filter by check-out date from",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "check_out_date_to",
+            "required": false,
+            "in": "query",
+            "description": "Filter by check-out date to",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "min_guests",
+            "required": false,
+            "in": "query",
+            "description": "Filter by minimum guests",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "max_guests",
+            "required": false,
+            "in": "query",
+            "description": "Filter by maximum guests",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "min_rooms",
+            "required": false,
+            "in": "query",
+            "description": "Filter by minimum rooms",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "max_rooms",
+            "required": false,
+            "in": "query",
+            "description": "Filter by maximum rooms",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Items per page",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort_by",
+            "required": false,
+            "in": "query",
+            "description": "Sort field",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort_order",
+            "required": false,
+            "in": "query",
+            "description": "Sort order (asc/desc)",
+            "schema": {
+              "default": "desc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pending hotel bookings retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "summary": "Get all pending hotel bookings",
+        "tags": [
+          "Hotel Bookings"
+        ]
+      }
+    },
+    "/hotel-bookings/hotel/{hotelId}": {
+      "get": {
+        "operationId": "HotelBookingController_findByHotel",
+        "parameters": [
+          {
+            "name": "hotelId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "customer_name",
+            "required": false,
+            "in": "query",
+            "description": "Filter by customer name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "customer_email",
+            "required": false,
+            "in": "query",
+            "description": "Filter by customer email",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "hotel_id",
+            "required": false,
+            "in": "query",
+            "description": "Filter by hotel ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "check_in_date_from",
+            "required": false,
+            "in": "query",
+            "description": "Filter by check-in date from",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "check_in_date_to",
+            "required": false,
+            "in": "query",
+            "description": "Filter by check-in date to",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "check_out_date_from",
+            "required": false,
+            "in": "query",
+            "description": "Filter by check-out date from",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "check_out_date_to",
+            "required": false,
+            "in": "query",
+            "description": "Filter by check-out date to",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "min_guests",
+            "required": false,
+            "in": "query",
+            "description": "Filter by minimum guests",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "max_guests",
+            "required": false,
+            "in": "query",
+            "description": "Filter by maximum guests",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "min_rooms",
+            "required": false,
+            "in": "query",
+            "description": "Filter by minimum rooms",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "max_rooms",
+            "required": false,
+            "in": "query",
+            "description": "Filter by maximum rooms",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Items per page",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort_by",
+            "required": false,
+            "in": "query",
+            "description": "Sort field",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort_order",
+            "required": false,
+            "in": "query",
+            "description": "Sort order (asc/desc)",
+            "schema": {
+              "default": "desc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hotel bookings retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "summary": "Get hotel bookings for a specific hotel",
+        "tags": [
+          "Hotel Bookings"
+        ]
+      }
+    },
+    "/hotel-bookings/{id}": {
+      "get": {
+        "operationId": "HotelBookingController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hotel booking retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Hotel booking not found"
+          }
+        },
+        "summary": "Get a hotel booking by ID",
+        "tags": [
+          "Hotel Bookings"
+        ]
+      },
+      "patch": {
+        "operationId": "HotelBookingController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateHotelBookingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Hotel booking updated successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Hotel booking not found"
+          }
+        },
+        "summary": "Update a hotel booking",
+        "tags": [
+          "Hotel Bookings"
+        ]
+      },
+      "delete": {
+        "operationId": "HotelBookingController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Hotel booking deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Hotel booking not found"
+          }
+        },
+        "summary": "Delete a hotel booking",
+        "tags": [
+          "Hotel Bookings"
+        ]
+      }
+    },
+    "/hotel-bookings/{id}/approve": {
+      "patch": {
+        "operationId": "HotelBookingController_approveBooking",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hotel booking approved successfully"
+          },
+          "400": {
+            "description": "Bad request - booking cannot be approved"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Pending booking not found"
+          }
+        },
+        "summary": "Approve a pending hotel booking",
+        "tags": [
+          "Hotel Bookings"
+        ]
+      }
+    },
+    "/hotel-bookings/{id}/reject": {
+      "patch": {
+        "operationId": "HotelBookingController_rejectBooking",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hotel booking rejected successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Pending booking not found"
+          }
+        },
+        "summary": "Reject a pending hotel booking",
+        "tags": [
+          "Hotel Bookings"
+        ]
+      }
     }
   },
   "info": {
@@ -1510,6 +2393,9 @@
             "enum": [
               "ACTIVE",
               "INACTIVE",
+              "PENDING",
+              "APPROVED",
+              "REJECTED",
               "DELETE"
             ],
             "default": "ACTIVE"
@@ -1595,6 +2481,9 @@
             "enum": [
               "ACTIVE",
               "INACTIVE",
+              "PENDING",
+              "APPROVED",
+              "REJECTED",
               "DELETE"
             ],
             "default": "ACTIVE"
@@ -1976,6 +2865,97 @@
           "longitude": {
             "type": "number",
             "description": "Longitude"
+          }
+        }
+      },
+      "CreateHotelBookingDto": {
+        "type": "object",
+        "properties": {
+          "customerName": {
+            "type": "string",
+            "description": "Customer name"
+          },
+          "customerEmail": {
+            "type": "string",
+            "description": "Customer email"
+          },
+          "checkInDate": {
+            "type": "string",
+            "description": "Check-in date"
+          },
+          "checkOutDate": {
+            "type": "string",
+            "description": "Check-out date"
+          },
+          "guests": {
+            "type": "number",
+            "description": "Number of guests",
+            "minimum": 1,
+            "default": 1
+          },
+          "rooms": {
+            "type": "number",
+            "description": "Number of rooms",
+            "minimum": 1,
+            "default": 1
+          },
+          "specialRequests": {
+            "type": "string",
+            "description": "Special requests"
+          },
+          "hotelId": {
+            "type": "string",
+            "description": "Hotel ID"
+          }
+        },
+        "required": [
+          "customerName",
+          "customerEmail",
+          "checkInDate",
+          "checkOutDate",
+          "guests",
+          "rooms",
+          "hotelId"
+        ]
+      },
+      "UpdateHotelBookingDto": {
+        "type": "object",
+        "properties": {
+          "customerName": {
+            "type": "string",
+            "description": "Customer name"
+          },
+          "customerEmail": {
+            "type": "string",
+            "description": "Customer email"
+          },
+          "checkInDate": {
+            "type": "string",
+            "description": "Check-in date"
+          },
+          "checkOutDate": {
+            "type": "string",
+            "description": "Check-out date"
+          },
+          "guests": {
+            "type": "number",
+            "description": "Number of guests",
+            "minimum": 1,
+            "default": 1
+          },
+          "rooms": {
+            "type": "number",
+            "description": "Number of rooms",
+            "minimum": 1,
+            "default": 1
+          },
+          "specialRequests": {
+            "type": "string",
+            "description": "Special requests"
+          },
+          "hotelId": {
+            "type": "string",
+            "description": "Hotel ID"
           }
         }
       }

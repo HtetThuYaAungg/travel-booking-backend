@@ -10,6 +10,9 @@ datasource db {
 enum Status {
   ACTIVE
   INACTIVE
+  PENDING
+  APPROVED
+  REJECTED
   DELETE
 }
 
@@ -69,6 +72,12 @@ model User {
   created_hotels Hotel[] @relation("hotel_created_by")
   updated_hotels Hotel[] @relation("hotel_updated_by")
   deleted_hotels Hotel[] @relation("hotel_deleted_by")
+
+  // Hotel booking relations
+  hotel_bookings HotelBooking[] @relation("user_bookings")
+  created_bookings HotelBooking[] @relation("booking_created_by")
+  updated_bookings HotelBooking[] @relation("booking_updated_by")
+  deleted_bookings HotelBooking[] @relation("booking_deleted_by")
 
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
@@ -219,8 +228,43 @@ model Hotel {
   deleted_by_id String?
   deleted_by    User?   @relation("hotel_deleted_by", fields: [deleted_by_id], references: [id])
 
+  // Hotel booking relations
+  bookings HotelBooking[] @relation("hotel_bookings")
+
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
   deleted_at DateTime?
   @@unique([name, location, deleted_at], name: "unique_hotel_name_location_deleted")
+}
+
+model HotelBooking {
+  id              String   @id @default(uuid())
+  customer_name   String
+  customer_email  String
+  check_in_date   DateTime
+  check_out_date  DateTime
+  guests          Int      @default(1)
+  rooms           Int      @default(1)
+  special_requests String?
+  status          Status   @default(PENDING)
+  
+  // Relations
+  hotel_id        String
+  hotel           Hotel    @relation("hotel_bookings", fields: [hotel_id], references: [id])
+  
+  user_id         String?
+  user            User?    @relation("user_bookings", fields: [user_id], references: [id])
+  
+  created_by_id   String?
+  created_by      User?    @relation("booking_created_by", fields: [created_by_id], references: [id])
+  
+  updated_by_id   String?
+  updated_by      User?    @relation("booking_updated_by", fields: [updated_by_id], references: [id])
+  
+  deleted_by_id   String?
+  deleted_by      User?    @relation("booking_deleted_by", fields: [deleted_by_id], references: [id])
+  
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+  deleted_at      DateTime?
 }

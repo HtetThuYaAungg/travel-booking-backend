@@ -189,10 +189,10 @@ async function main() {
         action: 'read',
       },
       {
-        name: 'hotels:update',
+        name: 'hotels:edit',
         description: 'Update hotels',
         module: 'hotels',
-        action: 'update',
+        action: 'edit',
       },
       {
         name: 'hotels:delete',
@@ -206,7 +206,89 @@ async function main() {
         module: 'hotels',
         action: 'list',
       },
+      {
+        name: 'hotel-bookings:create',
+        description: 'Create hotel bookings',
+        module: 'hotel-bookings',
+        action: 'create',
+      },
+      {
+        name: 'hotel-bookings:read',
+        description: 'View hotel bookings',
+        module: 'hotel-bookings',
+        action: 'read',
+      },
+      {
+        name: 'hotel-bookings:edit',
+        description: 'Update hotel bookings',
+        module: 'hotel-bookings',
+        action: 'eidt',
+      },
+      {
+        name: 'hotel-bookings:delete',
+        description: 'Delete hotel bookings',
+        module: 'hotel-bookings',
+        action: 'delete',
+      },
+      {
+        name: 'hotel-bookings:list',
+        description: 'List hotel bookings',
+        module: 'hotel-bookings',
+        action: 'list',
+      },
+      {
+        name: 'hotel-bookings:approve',
+        description: 'Approve hotel bookings',
+        module: 'hotel-bookings',
+        action: 'approve',
+      },
+      {
+        name: 'hotel-bookings:reject',
+        description: 'Reject hotel bookings',
+        module: 'hotel-bookings',
+        action: 'reject',
+      },
     ];
+
+    const userPermissions = [
+      {
+        name: 'hotels:read',
+        description: 'View hotels',
+        module: 'hotels',
+        action: 'read',
+      },
+      {
+        name: 'hotels:list',
+        description: 'List hotels',
+        module: 'hotels',
+        action: 'list',
+      },
+      {
+        name: 'hotel-bookings:create',
+        description: 'Create hotel bookings',
+        module: 'hotel-bookings',
+        action: 'create',
+      },
+      {
+        name: 'hotel-bookings:read',
+        description: 'View hotel bookings',
+        module: 'hotel-bookings',
+        action: 'read',
+      },
+      {
+        name: 'hotel-bookings:edit',
+        description: 'Update hotel bookings',
+        module: 'hotel-bookings',
+        action: 'edit',
+      },
+      {
+        name: 'hotel-bookings:delete',
+        description: 'Delete hotel bookings',
+        module: 'hotel-bookings',
+        action: 'delete',
+      }
+      
+    ]
 
     for (const permission of permissions) {
       const existingPermission = await prisma.permission.findFirst({
@@ -284,14 +366,31 @@ async function main() {
                     read: true,
                   },
                 },
+              ],
+            },
+            {
+              menuName: 'Travel',
+              subMenus: [
                 {
                   menuName: 'Hotels',
                   actions: {
                     create: true,
                     delete: true,
-                    update: true,
+                    edit: true,
                     list: true,
                     read: true,
+                  },
+                },
+                {
+                  menuName: 'Hotel Bookings',
+                  actions: {
+                    create: true,
+                    delete: true,
+                    edit: true,
+                    list: true,
+                    read: true,
+                    approve: true,
+                    reject: true,
                   },
                 },
               ],
@@ -318,20 +417,22 @@ async function main() {
           status: 'ACTIVE',
           permissions: [
             {
-              menuName: 'Dashboard',
+              menuName: 'Travel',
               subMenus: [
-                {
-                  menuName: 'Profile',
-                  actions: {
-                    read: true,
-                    edit: true,
-                  },
-                },
                 {
                   menuName: 'Hotels',
                   actions: {
-                    read: true,
                     list: true,
+                    read: true,
+                  },
+                },
+                {
+                  menuName: 'Hotel Bookings',
+                  actions: {
+                    create: true,
+                    read: true,
+                    edit: true,
+                    delete: true,
                   },
                 },
               ],
@@ -345,6 +446,10 @@ async function main() {
     // 4. Assign permissions to the admin role
     const existingPermissions = await prisma.permission.findMany({
       where: { name: { in: permissions.map((p) => p.name) } },
+    });
+
+    const existingUserPermissions = await prisma.permission.findMany({
+      where: { name: { in: userPermissions.map((p) => p.name) } },
     });
 
     console.log('🔗 Assigning permissions to admin role...');
@@ -364,6 +469,24 @@ async function main() {
       });
     }
     console.log('✅ Permissions assigned to admin role');
+
+    console.log('🔗 Assigning permissions to user role...');
+    for (const userPermission of existingUserPermissions) {
+      await prisma.rolePermission.upsert({
+        where: {
+          role_id_permission_id: {
+            role_id: userRole.id,
+            permission_id: userPermission.id,
+          },
+        },
+        update: {},
+        create: {
+          role_id: userRole.id,
+          permission_id: userPermission.id,
+        },
+      });
+    }
+    console.log('✅ Permissions assigned to user role');
 
     // 5. Hash password
     const hashedPassword = await bcrypt.hash('Admin@123', 10);
@@ -570,6 +693,151 @@ async function main() {
         latitude: 21.1722,
         longitude: 94.8602,
       },
+      {
+        name: 'Shan Hill Resort',
+        description: 'Luxurious resort in the heart of the mountains with stunning views and world-class amenities. Experience unparalleled comfort and service.',
+        location: 'Shan Hills',
+        city: 'Kalaw',
+        country: 'Myanmar',
+        price: 250.00,
+        currency: 'USD',
+        rating: 4.8,
+        star_rating: 5,
+        amenities: ['WiFi', 'Pool', 'Spa', 'Gym', 'Restaurant', 'Parking'],
+        images: [
+          'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800',
+          'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800'
+        ],
+        has_wifi: true,
+        has_pool: true,
+        has_spa: true,
+        has_gym: true,
+        has_restaurant: true,
+        has_parking: true,
+        has_pet_friendly: false,
+        phone: '+95-61-234-5678',
+        email: 'info@shanhillresort.com',
+        website: 'https://shanhillresort.com',
+        address: '123 Shan Hill Road, Kalaw, Myanmar',
+        latitude: 20.6221,
+        longitude: 96.5689,
+      },
+      {
+        name: 'Inle Lake Resort',
+        description: 'Luxurious resort on the shores of Inle Lake with stunning views and world-class amenities. Experience unparalleled comfort and service.',
+        location: 'Inle Lake',
+        city: 'Inle Lake',
+        country: 'Myanmar',
+        price: 250.00,
+        currency: 'USD',
+        rating: 4.8,
+        star_rating: 5,
+        amenities: ['WiFi', 'Pool', 'Spa', 'Gym', 'Restaurant', 'Parking'],
+        images: [
+          'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800',
+          'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800'
+        ],
+        has_wifi: true,
+        has_pool: true,
+        has_spa: true,
+        has_gym: true,
+        has_restaurant: true,
+        has_parking: true,
+        has_pet_friendly: false,
+        phone: '+95-61-234-5678',
+        email: 'info@inlelakeresort.com',
+        website: 'https://inlelakeresort.com',
+        address: '123 Inle Lake Road, Inle Lake, Myanmar',
+        latitude: 20.6221,
+        longitude: 96.5689,
+      },
+      {
+        name: 'Shwedagon Pagoda Resort',
+        description: 'Luxurious resort in the heart of the city with stunning views and world-class amenities. Experience unparalleled comfort and service.',
+        location: 'Shwedagon Pagoda',
+        city: 'Yangon',
+        country: 'Myanmar',
+        price: 250.00,
+        currency: 'USD',
+        rating: 4.8,
+        star_rating: 5,
+        amenities: ['WiFi', 'Pool', 'Spa', 'Gym', 'Restaurant', 'Parking'],
+        images: [
+          'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800',
+          'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800'
+        ],
+        has_wifi: true,
+        has_pool: true,
+        has_spa: true,
+        has_gym: true,
+        has_restaurant: true,
+        has_parking: true,
+        has_pet_friendly: false,
+        phone: '+95-61-234-5678',
+        email: 'info@shwedagonpagodaresort.com',
+        website: 'https://shwedagonpagodaresort.com',
+        address: '123 Shwedagon Pagoda Road, Yangon, Myanmar',
+        latitude: 20.6221,
+        longitude: 96.5689,
+      },
+      {
+        name: 'Golden Rock Resort',
+        description: 'Luxurious resort in the heart of the city with stunning views and world-class amenities. Experience unparalleled comfort and service.',
+        location: 'Golden Rock',
+        city: 'Yangon',
+        country: 'Myanmar',
+        price: 250.00,
+        currency: 'USD',
+        rating: 4.8,
+        star_rating: 5,
+        amenities: ['WiFi', 'Pool', 'Spa', 'Gym', 'Restaurant', 'Parking'],
+        images: [
+          'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800',
+          'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800'
+        ],
+        has_wifi: true,
+        has_pool: true,
+        has_spa: true,
+        has_gym: true,
+        has_restaurant: true,
+        has_parking: true,
+        has_pet_friendly: false,
+        phone: '+95-61-234-5678',
+        email: 'info@goldenrockresort.com',
+        website: 'https://goldenrockresort.com',
+        address: '123 Golden Rock Road, Yangon, Myanmar',
+        latitude: 20.6221,
+        longitude: 96.5689,
+      },
+      {
+        name: 'Myanmar Golden Temple Resort',
+        description: 'Luxurious resort in the heart of the city with stunning views and world-class amenities. Experience unparalleled comfort and service.',
+        location: 'Myanmar Golden Temple',
+        city: 'Yangon',
+        country: 'Myanmar',
+        price: 250.00,
+        currency: 'USD',
+        rating: 4.8,
+        star_rating: 5,
+        amenities: ['WiFi', 'Pool', 'Spa', 'Gym', 'Restaurant', 'Parking'],
+        images: [
+          'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800',
+          'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800'
+        ],
+        has_wifi: true,
+        has_pool: true,
+        has_spa: true,
+        has_gym: true,
+        has_restaurant: true,
+        has_parking: true,
+        has_pet_friendly: false,
+        phone: '+95-61-234-5678',
+        email: 'info@myanmargoldentempleresort.com',
+        website: 'https://myanmargoldentempleresort.com',
+        address: '123 Myanmar Golden Temple Road, Yangon, Myanmar',
+        latitude: 20.6221,
+        longitude: 96.5689,
+      }
     ];
 
     for (const hotelData of hotels) {

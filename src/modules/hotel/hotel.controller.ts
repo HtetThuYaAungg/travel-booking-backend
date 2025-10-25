@@ -50,6 +50,7 @@ export class HotelController {
   }
 
   @Get()
+  @Public()
   @ApiOperation({ summary: 'Get all hotels with filtering and pagination' })
   @ApiResponse({ status: 200, description: 'Hotels retrieved successfully' })
   @ApiQuery({
@@ -186,7 +187,7 @@ export class HotelController {
   }
 
   @Get(':id')
-  @Permission('hotels:read')
+  @Public()
   @ApiOperation({ summary: 'Get hotel by ID' })
   @ApiResponse({ status: 200, description: 'Hotel retrieved successfully' })
   @ApiResponse({ status: 404, description: 'Hotel not found' })

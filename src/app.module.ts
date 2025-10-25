@@ -20,6 +20,7 @@ import { UserModule } from './modules/user/user.module';
 import { CollectionCountModule } from './modules/collection-count/collection-count.module';
 import { PermissionModule } from './modules/permission/permission.module';
 import { HotelModule } from './modules/hotel/hotel.module';
+import { HotelBookingModule } from './modules/hotel-booking/hotel-booking.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
@@ -45,6 +46,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     CollectionCountModule,
     PermissionModule,
     HotelModule,
+    HotelBookingModule,
 
   ],
   controllers: [AppController],
