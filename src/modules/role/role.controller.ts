@@ -11,6 +11,7 @@ import {
   Query,
   UseGuards,
   ParseIntPipe,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { RoleService } from './role.service';
 
@@ -82,7 +83,7 @@ export class RoleController {
     status: HttpStatus.OK,
     description: 'Role details',
   })
-  async getRoleById(@Param('id') id: string): Promise<RoleEntity> {
+  async getRoleById(@Param('id', ParseUUIDPipe) id: string): Promise<RoleEntity> {
     return this.roleService.getRoleById(id);
   }
 
@@ -94,7 +95,7 @@ export class RoleController {
     description: 'Role updated successfully',
   })
   async updateRole(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() updateRoleDto: UpdateRoleDto,
     @Req() req: Request,
   ): Promise<Role> {
@@ -109,7 +110,7 @@ export class RoleController {
     description: 'Role deleted successfully',
   })
   async deleteRole(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Req() req: Request,
   ): Promise<Role> {
     return this.roleService.deleteRole(id, req);
@@ -123,7 +124,7 @@ export class RoleController {
     description: 'Role permissions retrieved successfully',
   })
   async getRolePermissions(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
   ): Promise<any> {
     return this.roleService.getRolePermissions(id);
   }

@@ -18,6 +18,12 @@ class PermissionActionDto {
 
   @IsNotEmpty()
   list: boolean;
+
+  @IsNotEmpty()
+  reject: boolean;
+
+  @IsNotEmpty()
+  approve: boolean;
 }
 
 class SubMenuDto {
@@ -40,6 +46,8 @@ export class PermissionDto {
   subMenus?: SubMenuDto[];
 
   @Optional()
+  @ValidateNested()
+  @Type(() => PermissionActionDto)
   actions?: PermissionActionDto;
 }
 

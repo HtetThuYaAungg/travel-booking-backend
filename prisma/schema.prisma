@@ -73,11 +73,21 @@ model User {
   updated_hotels Hotel[] @relation("hotel_updated_by")
   deleted_hotels Hotel[] @relation("hotel_deleted_by")
 
+  created_flights Flight[] @relation("flight_created_by")
+  updated_flights Flight[] @relation("flight_updated_by")
+  deleted_flights Flight[] @relation("flight_deleted_by")
+
   // Hotel booking relations
   hotel_bookings HotelBooking[] @relation("user_bookings")
   created_bookings HotelBooking[] @relation("booking_created_by")
   updated_bookings HotelBooking[] @relation("booking_updated_by")
   deleted_bookings HotelBooking[] @relation("booking_deleted_by")
+
+  // Flight booking relations
+  flight_bookings FlightBooking[] @relation("user_flight_bookings")
+  created_flight_bookings FlightBooking[] @relation("flight_booking_created_by")
+  updated_flight_bookings FlightBooking[] @relation("flight_booking_updated_by")
+  deleted_flight_bookings FlightBooking[] @relation("flight_booking_deleted_by")
 
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
@@ -267,4 +277,115 @@ model HotelBooking {
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
   deleted_at      DateTime?
+}
+
+model Flight {
+  id              String   @id @default(uuid())
+  flight_number   String   // e.g., "8M335", "K7242"
+  airline_name    String   // e.g., "Myanmar Airways International", "Air KBZ"
+  airline_code    String   // e.g., "8M", "K7"
+  aircraft_type   String   // e.g., "ATR 72", "Embraer E190"
+  
+  // Route information
+  departure_airport_code String  // e.g., "RGN"
+  departure_airport_name String  // e.g., "Yangon"
+  departure_city         String  // e.g., "Yangon"
+  departure_country      String  // e.g., "Myanmar"
+  
+  arrival_airport_code   String  // e.g., "MDL"
+  arrival_airport_name   String  // e.g., "Mandalay"
+  arrival_city           String  // e.g., "Mandalay"
+  arrival_country        String  // e.g., "Myanmar"
+  
+  // Flight timing
+  departure_time         DateTime
+  arrival_time           DateTime
+  duration_minutes       Int     // e.g., 75 for 1h 15m
+  
+  // Pricing and availability
+  base_price             Float
+  currency               String  @default("USD")
+  available_seats        Int     @default(0)
+  total_seats            Int     @default(100)
+  
+  // Flight class and features
+  class_type             String  @default("Economy") // Economy, Business, First
+  has_wifi               Boolean @default(false)
+  has_meal               Boolean @default(false)
+  has_entertainment      Boolean @default(false)
+  has_luggage            Boolean @default(true)
+  
+  // Status and metadata
+  status                 Status  @default(ACTIVE)
+  is_domestic            Boolean @default(true)
+  
+  // Relations
+  bookings               FlightBooking[] @relation("flight_bookings")
+  
+  created_by_id          String?
+  created_by             User?   @relation("flight_created_by", fields: [created_by_id], references: [id])
+  
+  updated_by_id          String?
+  updated_by             User?   @relation("flight_updated_by", fields: [updated_by_id], references: [id])
+  
+  deleted_by_id          String?
+  deleted_by             User?   @relation("flight_deleted_by", fields: [deleted_by_id], references: [id])
+  
+  created_at             DateTime @default(now())
+  updated_at             DateTime @updatedAt
+  deleted_at             DateTime?
+  
+  @@unique([flight_number, departure_time, deleted_at], name: "unique_flight_number_departure_deleted")
+}
+
+model FlightBooking {
+  id                    String   @id @default(uuid())
+  booking_reference     String   @unique // e.g., "FB123456"
+  customer_name         String
+  customer_email        String
+  customer_phone        String?
+  
+  // Passenger details
+  passengers            Json     // Array of passenger objects with name, age, seat preferences
+  total_passengers      Int      @default(1)
+  
+  // Flight details
+  departure_date        DateTime
+  return_date           DateTime? // For round-trip flights
+  
+  // Pricing
+  total_price           Float
+  currency              String   @default("USD")
+  base_price            Float
+  taxes_fees            Float    @default(0)
+  discounts             Float    @default(0)
+  
+  // Booking preferences
+  seat_preferences      Json?    // Array of seat preferences
+  meal_preferences      Json?    // Array of meal preferences
+  special_requests      String?
+  
+  // Status
+  status                Status   @default(PENDING)
+  payment_status        String   @default("PENDING") // PENDING, PAID, REFUNDED, FAILED
+  
+  // Relations
+  flight_id             String
+  flight                Flight   @relation("flight_bookings", fields: [flight_id], references: [id])
+  
+  user_id               String?
+  user                  User?    @relation("user_flight_bookings", fields: [user_id], references: [id])
+  
+  created_by_id         String?
+  created_by            User?    @relation("flight_booking_created_by", fields: [created_by_id], references: [id])
+  
+  updated_by_id         String?
+  updated_by            User?    @relation("flight_booking_updated_by", fields: [updated_by_id], references: [id])
+  
+  deleted_by_id         String?
+  deleted_by            User?    @relation("flight_booking_deleted_by", fields: [deleted_by_id], references: [id])
+  
+  created_at            DateTime @default(now())
+  updated_at            DateTime @updatedAt
+  deleted_at            DateTime?
 }

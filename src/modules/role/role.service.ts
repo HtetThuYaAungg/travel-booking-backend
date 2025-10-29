@@ -80,17 +80,19 @@ export class RoleService {
       end_date,
     );
 
+
     const [roles, total] = await Promise.all([
       this.prisma.role.findMany({
         where,
         skip,
         take: Number(limit),
-        orderBy: { created_at: 'desc' },
+        orderBy: { created_at:'desc'},
         select: {
           id: true,
           role_code: true,
           role_name: true,
           created_by: { select: { full_name: true } },
+          updated_by: { select: { full_name: true } },
         },
       }),
       this.prisma.role.count({ where }),
@@ -198,7 +200,10 @@ export class RoleService {
 
   async getCommonRoles(): Promise<{ role_code: string; role_name: string }[]> {
     return this.prisma.role.findMany({
-      where: { role_code: { not: 'SYS_ADMIN' }, status: { not: Status.DELETE } },
+      where: {
+        role_code: { not: 'SYS_ADMIN' },
+        status: { not: Status.DELETE },
+      },
       select: { role_code: true, role_name: true },
     });
   }
@@ -221,7 +226,7 @@ export class RoleService {
       select: { id: true },
     });
 
-    return role?.id || '';
+    return role?.id || "";
   }
 
   async getRolePermissions(roleId: string): Promise<any> {
@@ -277,6 +282,12 @@ export class RoleService {
         }
         // If it exists and is active, do nothing (avoid duplicate)
       } catch (error: any) {
+        if (error instanceof NotFoundException) {
+          console.warn(
+            `Permission '${permissionName}' does not exist, skipping...`,
+          );
+          continue;
+        }
         if (error.code !== 'P2002') {
           throw error;
         }
@@ -349,9 +360,19 @@ export class RoleService {
       edit: boolean;
       delete: boolean;
       list: boolean;
+      reject: boolean;
+      approve: boolean;
     },
   ): void {
-    const availableActions = ['create', 'read', 'edit', 'delete', 'list'];
+    const availableActions = [
+      'create',
+      'read',
+      'edit',
+      'delete',
+      'list',
+      'reject',
+      'approve',
+    ];
 
     availableActions.forEach((action) => {
       if (actions[action] === true) {

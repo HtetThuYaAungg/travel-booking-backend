@@ -21,6 +21,8 @@ import { CollectionCountModule } from './modules/collection-count/collection-cou
 import { PermissionModule } from './modules/permission/permission.module';
 import { HotelModule } from './modules/hotel/hotel.module';
 import { HotelBookingModule } from './modules/hotel-booking/hotel-booking.module';
+import { FlightModule } from './modules/flight/flight.module';
+import { FlightBookingModule } from './modules/flight-booking/flight-booking.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
@@ -47,6 +49,8 @@ import { ThrottlerModule } from '@nestjs/throttler';
     PermissionModule,
     HotelModule,
     HotelBookingModule,
+    FlightModule,
+    FlightBookingModule,
 
   ],
   controllers: [AppController],

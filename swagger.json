@@ -2314,6 +2314,1055 @@
           "Hotel Bookings"
         ]
       }
+    },
+    "/flights": {
+      "post": {
+        "operationId": "FlightController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFlightDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Flight created successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "summary": "Create a new flight",
+        "tags": [
+          "Flights"
+        ]
+      },
+      "get": {
+        "operationId": "FlightController_findAll",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Search by flight number, airline name, or airport codes",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "departure_airport_code",
+            "required": false,
+            "in": "query",
+            "description": "Departure airport code",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "arrival_airport_code",
+            "required": false,
+            "in": "query",
+            "description": "Arrival airport code",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "departure_city",
+            "required": false,
+            "in": "query",
+            "description": "Departure city",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "arrival_city",
+            "required": false,
+            "in": "query",
+            "description": "Arrival city",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "airline_name",
+            "required": false,
+            "in": "query",
+            "description": "Airline name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "airline_code",
+            "required": false,
+            "in": "query",
+            "description": "Airline code",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "departure_date",
+            "required": false,
+            "in": "query",
+            "description": "Departure date (ISO 8601 format)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "min_price",
+            "required": false,
+            "in": "query",
+            "description": "Minimum price",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "max_price",
+            "required": false,
+            "in": "query",
+            "description": "Maximum price",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "class_type",
+            "required": false,
+            "in": "query",
+            "description": "Flight class type",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "has_wifi",
+            "required": false,
+            "in": "query",
+            "description": "Has WiFi",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "has_meal",
+            "required": false,
+            "in": "query",
+            "description": "Has meal service",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "is_domestic",
+            "required": false,
+            "in": "query",
+            "description": "Is domestic flight",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "min_available_seats",
+            "required": false,
+            "in": "query",
+            "description": "Minimum available seats",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "description": "Status filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Items per page",
+            "schema": {
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort_by",
+            "required": false,
+            "in": "query",
+            "description": "Sort field",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort_order",
+            "required": false,
+            "in": "query",
+            "description": "Sort order",
+            "schema": {
+              "default": "asc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Flights retrieved successfully"
+          }
+        },
+        "summary": "Get all flights with filtering and pagination",
+        "tags": [
+          "Flights"
+        ]
+      }
+    },
+    "/flights/search": {
+      "get": {
+        "operationId": "FlightController_searchFlights",
+        "parameters": [
+          {
+            "name": "departure",
+            "required": true,
+            "in": "query",
+            "description": "Departure airport code",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "arrival",
+            "required": true,
+            "in": "query",
+            "description": "Arrival airport code",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "required": true,
+            "in": "query",
+            "description": "Departure date (YYYY-MM-DD)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "passengers",
+            "required": false,
+            "in": "query",
+            "description": "Number of passengers",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "returnDate",
+            "required": false,
+            "in": "query",
+            "description": "Return date for round-trip",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Flight search results"
+          }
+        },
+        "summary": "Search flights by route and date",
+        "tags": [
+          "Flights"
+        ]
+      }
+    },
+    "/flights/airlines": {
+      "get": {
+        "operationId": "FlightController_getAirlines",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Airlines retrieved successfully"
+          }
+        },
+        "summary": "Get list of available airlines",
+        "tags": [
+          "Flights"
+        ]
+      }
+    },
+    "/flights/popular-routes": {
+      "get": {
+        "operationId": "FlightController_getPopularRoutes",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Popular routes retrieved successfully"
+          }
+        },
+        "summary": "Get popular flight routes",
+        "tags": [
+          "Flights"
+        ]
+      }
+    },
+    "/flights/{id}": {
+      "get": {
+        "operationId": "FlightController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Flight retrieved successfully"
+          },
+          "404": {
+            "description": "Flight not found"
+          }
+        },
+        "summary": "Get flight by ID",
+        "tags": [
+          "Flights"
+        ]
+      },
+      "patch": {
+        "operationId": "FlightController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFlightDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Flight updated successfully"
+          },
+          "404": {
+            "description": "Flight not found"
+          }
+        },
+        "summary": "Update flight",
+        "tags": [
+          "Flights"
+        ]
+      },
+      "delete": {
+        "operationId": "FlightController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Flight deleted successfully"
+          },
+          "404": {
+            "description": "Flight not found"
+          }
+        },
+        "summary": "Delete flight",
+        "tags": [
+          "Flights"
+        ]
+      }
+    },
+    "/flight-bookings": {
+      "post": {
+        "operationId": "FlightBookingController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFlightBookingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Flight booking created successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "summary": "Create a new flight booking",
+        "tags": [
+          "Flight Bookings"
+        ]
+      },
+      "get": {
+        "operationId": "FlightBookingController_findAll",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Search by booking reference, customer name, or email",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "booking_reference",
+            "required": false,
+            "in": "query",
+            "description": "Booking reference",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "customer_name",
+            "required": false,
+            "in": "query",
+            "description": "Customer name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "customer_email",
+            "required": false,
+            "in": "query",
+            "description": "Customer email",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "flight_id",
+            "required": false,
+            "in": "query",
+            "description": "Flight ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "user_id",
+            "required": false,
+            "in": "query",
+            "description": "User ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "departure_date",
+            "required": false,
+            "in": "query",
+            "description": "Departure date (ISO 8601 format)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "return_date",
+            "required": false,
+            "in": "query",
+            "description": "Return date (ISO 8601 format)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "min_price",
+            "required": false,
+            "in": "query",
+            "description": "Minimum total price",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "max_price",
+            "required": false,
+            "in": "query",
+            "description": "Maximum total price",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "description": "Booking status",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "payment_status",
+            "required": false,
+            "in": "query",
+            "description": "Payment status",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "currency",
+            "required": false,
+            "in": "query",
+            "description": "Currency",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "is_round_trip",
+            "required": false,
+            "in": "query",
+            "description": "Is round trip",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Items per page",
+            "schema": {
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort_by",
+            "required": false,
+            "in": "query",
+            "description": "Sort field",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort_order",
+            "required": false,
+            "in": "query",
+            "description": "Sort order",
+            "schema": {
+              "default": "desc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Flight bookings retrieved successfully"
+          }
+        },
+        "summary": "Get all flight bookings with filtering and pagination",
+        "tags": [
+          "Flight Bookings"
+        ]
+      }
+    },
+    "/flight-bookings/my-bookings": {
+      "get": {
+        "operationId": "FlightBookingController_getMyBookings",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Search by booking reference, customer name, or email",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "booking_reference",
+            "required": false,
+            "in": "query",
+            "description": "Booking reference",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "customer_name",
+            "required": false,
+            "in": "query",
+            "description": "Customer name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "customer_email",
+            "required": false,
+            "in": "query",
+            "description": "Customer email",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "flight_id",
+            "required": false,
+            "in": "query",
+            "description": "Flight ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "user_id",
+            "required": false,
+            "in": "query",
+            "description": "User ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "departure_date",
+            "required": false,
+            "in": "query",
+            "description": "Departure date (ISO 8601 format)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "return_date",
+            "required": false,
+            "in": "query",
+            "description": "Return date (ISO 8601 format)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "min_price",
+            "required": false,
+            "in": "query",
+            "description": "Minimum total price",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "max_price",
+            "required": false,
+            "in": "query",
+            "description": "Maximum total price",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "description": "Booking status",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "payment_status",
+            "required": false,
+            "in": "query",
+            "description": "Payment status",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "currency",
+            "required": false,
+            "in": "query",
+            "description": "Currency",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "is_round_trip",
+            "required": false,
+            "in": "query",
+            "description": "Is round trip",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Items per page",
+            "schema": {
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort_by",
+            "required": false,
+            "in": "query",
+            "description": "Sort field",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort_order",
+            "required": false,
+            "in": "query",
+            "description": "Sort order",
+            "schema": {
+              "default": "desc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User flight bookings retrieved successfully"
+          }
+        },
+        "summary": "Get current user flight bookings",
+        "tags": [
+          "Flight Bookings"
+        ]
+      }
+    },
+    "/flight-bookings/statistics": {
+      "get": {
+        "operationId": "FlightBookingController_getStatistics",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Statistics retrieved successfully"
+          }
+        },
+        "summary": "Get flight booking statistics",
+        "tags": [
+          "Flight Bookings"
+        ]
+      }
+    },
+    "/flight-bookings/reference/{reference}": {
+      "get": {
+        "operationId": "FlightBookingController_findByReference",
+        "parameters": [
+          {
+            "name": "reference",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Flight booking retrieved successfully"
+          },
+          "404": {
+            "description": "Flight booking not found"
+          }
+        },
+        "summary": "Get flight booking by reference number",
+        "tags": [
+          "Flight Bookings"
+        ]
+      }
+    },
+    "/flight-bookings/{id}": {
+      "get": {
+        "operationId": "FlightBookingController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Flight booking retrieved successfully"
+          },
+          "404": {
+            "description": "Flight booking not found"
+          }
+        },
+        "summary": "Get flight booking by ID",
+        "tags": [
+          "Flight Bookings"
+        ]
+      },
+      "patch": {
+        "operationId": "FlightBookingController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFlightBookingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Flight booking updated successfully"
+          },
+          "404": {
+            "description": "Flight booking not found"
+          }
+        },
+        "summary": "Update flight booking",
+        "tags": [
+          "Flight Bookings"
+        ]
+      },
+      "delete": {
+        "operationId": "FlightBookingController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Flight booking deleted successfully"
+          },
+          "404": {
+            "description": "Flight booking not found"
+          }
+        },
+        "summary": "Delete flight booking",
+        "tags": [
+          "Flight Bookings"
+        ]
+      }
+    },
+    "/flight-bookings/{id}/status": {
+      "patch": {
+        "operationId": "FlightBookingController_updateStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Booking status updated successfully"
+          },
+          "400": {
+            "description": "Invalid status"
+          }
+        },
+        "summary": "Update flight booking status",
+        "tags": [
+          "Flight Bookings"
+        ]
+      }
+    },
+    "/flight-bookings/{id}/payment-status": {
+      "patch": {
+        "operationId": "FlightBookingController_updatePaymentStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment status updated successfully"
+          },
+          "400": {
+            "description": "Invalid payment status"
+          }
+        },
+        "summary": "Update flight booking payment status",
+        "tags": [
+          "Flight Bookings"
+        ]
+      }
+    },
+    "/flight-bookings/{id}/approve": {
+      "patch": {
+        "operationId": "FlightBookingController_approveBooking",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Flight booking approved successfully"
+          },
+          "400": {
+            "description": "Bad request - booking cannot be approved"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Pending booking not found"
+          }
+        },
+        "summary": "Approve a pending flight booking",
+        "tags": [
+          "Flight Bookings"
+        ]
+      }
+    },
+    "/flight-bookings/{id}/reject": {
+      "patch": {
+        "operationId": "FlightBookingController_rejectBooking",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Flight booking rejected successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Pending booking not found"
+          }
+        },
+        "summary": "Reject a pending flight booking",
+        "tags": [
+          "Flight Bookings"
+        ]
+      }
     }
   },
   "info": {
@@ -2956,6 +4005,466 @@
           "hotelId": {
             "type": "string",
             "description": "Hotel ID"
+          }
+        }
+      },
+      "CreateFlightDto": {
+        "type": "object",
+        "properties": {
+          "flight_number": {
+            "type": "string",
+            "description": "Flight number (e.g., 8M335, K7242)"
+          },
+          "airline_name": {
+            "type": "string",
+            "description": "Airline name (e.g., Myanmar Airways International)"
+          },
+          "airline_code": {
+            "type": "string",
+            "description": "Airline code (e.g., 8M, K7)"
+          },
+          "aircraft_type": {
+            "type": "string",
+            "description": "Aircraft type (e.g., ATR 72, Embraer E190)"
+          },
+          "departure_airport_code": {
+            "type": "string",
+            "description": "Departure airport code (e.g., RGN)"
+          },
+          "departure_airport_name": {
+            "type": "string",
+            "description": "Departure airport name (e.g., Yangon)"
+          },
+          "departure_city": {
+            "type": "string",
+            "description": "Departure city"
+          },
+          "departure_country": {
+            "type": "string",
+            "description": "Departure country"
+          },
+          "arrival_airport_code": {
+            "type": "string",
+            "description": "Arrival airport code (e.g., MDL)"
+          },
+          "arrival_airport_name": {
+            "type": "string",
+            "description": "Arrival airport name (e.g., Mandalay)"
+          },
+          "arrival_city": {
+            "type": "string",
+            "description": "Arrival city"
+          },
+          "arrival_country": {
+            "type": "string",
+            "description": "Arrival country"
+          },
+          "departure_time": {
+            "type": "string",
+            "description": "Departure time (ISO 8601 format)"
+          },
+          "arrival_time": {
+            "type": "string",
+            "description": "Arrival time (ISO 8601 format)"
+          },
+          "duration_minutes": {
+            "type": "number",
+            "description": "Flight duration in minutes"
+          },
+          "base_price": {
+            "type": "number",
+            "description": "Base price of the flight"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency code",
+            "default": "USD"
+          },
+          "available_seats": {
+            "type": "number",
+            "description": "Number of available seats"
+          },
+          "total_seats": {
+            "type": "number",
+            "description": "Total number of seats",
+            "default": 100
+          },
+          "class_type": {
+            "type": "string",
+            "description": "Flight class type",
+            "default": "Economy"
+          },
+          "has_wifi": {
+            "type": "boolean",
+            "description": "Has WiFi",
+            "default": false
+          },
+          "has_meal": {
+            "type": "boolean",
+            "description": "Has meal service",
+            "default": false
+          },
+          "has_entertainment": {
+            "type": "boolean",
+            "description": "Has entertainment",
+            "default": false
+          },
+          "has_luggage": {
+            "type": "boolean",
+            "description": "Has luggage allowance",
+            "default": true
+          },
+          "is_domestic": {
+            "type": "boolean",
+            "description": "Is domestic flight",
+            "default": true
+          }
+        },
+        "required": [
+          "flight_number",
+          "airline_name",
+          "airline_code",
+          "aircraft_type",
+          "departure_airport_code",
+          "departure_airport_name",
+          "departure_city",
+          "departure_country",
+          "arrival_airport_code",
+          "arrival_airport_name",
+          "arrival_city",
+          "arrival_country",
+          "departure_time",
+          "arrival_time",
+          "duration_minutes",
+          "base_price",
+          "currency",
+          "available_seats",
+          "total_seats",
+          "class_type",
+          "has_wifi",
+          "has_meal",
+          "has_entertainment",
+          "has_luggage",
+          "is_domestic"
+        ]
+      },
+      "UpdateFlightDto": {
+        "type": "object",
+        "properties": {
+          "flight_number": {
+            "type": "string",
+            "description": "Flight number (e.g., 8M335, K7242)"
+          },
+          "airline_name": {
+            "type": "string",
+            "description": "Airline name (e.g., Myanmar Airways International)"
+          },
+          "airline_code": {
+            "type": "string",
+            "description": "Airline code (e.g., 8M, K7)"
+          },
+          "aircraft_type": {
+            "type": "string",
+            "description": "Aircraft type (e.g., ATR 72, Embraer E190)"
+          },
+          "departure_airport_code": {
+            "type": "string",
+            "description": "Departure airport code (e.g., RGN)"
+          },
+          "departure_airport_name": {
+            "type": "string",
+            "description": "Departure airport name (e.g., Yangon)"
+          },
+          "departure_city": {
+            "type": "string",
+            "description": "Departure city"
+          },
+          "departure_country": {
+            "type": "string",
+            "description": "Departure country"
+          },
+          "arrival_airport_code": {
+            "type": "string",
+            "description": "Arrival airport code (e.g., MDL)"
+          },
+          "arrival_airport_name": {
+            "type": "string",
+            "description": "Arrival airport name (e.g., Mandalay)"
+          },
+          "arrival_city": {
+            "type": "string",
+            "description": "Arrival city"
+          },
+          "arrival_country": {
+            "type": "string",
+            "description": "Arrival country"
+          },
+          "departure_time": {
+            "type": "string",
+            "description": "Departure time (ISO 8601 format)"
+          },
+          "arrival_time": {
+            "type": "string",
+            "description": "Arrival time (ISO 8601 format)"
+          },
+          "duration_minutes": {
+            "type": "number",
+            "description": "Flight duration in minutes"
+          },
+          "base_price": {
+            "type": "number",
+            "description": "Base price of the flight"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency code",
+            "default": "USD"
+          },
+          "available_seats": {
+            "type": "number",
+            "description": "Number of available seats"
+          },
+          "total_seats": {
+            "type": "number",
+            "description": "Total number of seats",
+            "default": 100
+          },
+          "class_type": {
+            "type": "string",
+            "description": "Flight class type",
+            "default": "Economy"
+          },
+          "has_wifi": {
+            "type": "boolean",
+            "description": "Has WiFi",
+            "default": false
+          },
+          "has_meal": {
+            "type": "boolean",
+            "description": "Has meal service",
+            "default": false
+          },
+          "has_entertainment": {
+            "type": "boolean",
+            "description": "Has entertainment",
+            "default": false
+          },
+          "has_luggage": {
+            "type": "boolean",
+            "description": "Has luggage allowance",
+            "default": true
+          },
+          "is_domestic": {
+            "type": "boolean",
+            "description": "Is domestic flight",
+            "default": true
+          }
+        }
+      },
+      "PassengerDto": {
+        "type": "object",
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "description": "Passenger full name"
+          },
+          "age": {
+            "type": "number",
+            "description": "Passenger age"
+          },
+          "type": {
+            "type": "string",
+            "description": "Passenger type",
+            "enum": [
+              "adult",
+              "child",
+              "infant"
+            ]
+          },
+          "seat_preference": {
+            "type": "string",
+            "description": "Seat preference"
+          },
+          "meal_preference": {
+            "type": "string",
+            "description": "Meal preference"
+          },
+          "special_requests": {
+            "type": "string",
+            "description": "Special requests"
+          }
+        },
+        "required": [
+          "full_name",
+          "age",
+          "type"
+        ]
+      },
+      "CreateFlightBookingDto": {
+        "type": "object",
+        "properties": {
+          "flight_id": {
+            "type": "string",
+            "description": "Flight ID"
+          },
+          "customer_name": {
+            "type": "string",
+            "description": "Customer full name"
+          },
+          "customer_email": {
+            "type": "string",
+            "description": "Customer email"
+          },
+          "customer_phone": {
+            "type": "string",
+            "description": "Customer phone number"
+          },
+          "passengers": {
+            "description": "Array of passengers",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PassengerDto"
+            }
+          },
+          "departure_date": {
+            "type": "string",
+            "description": "Departure date (ISO 8601 format)"
+          },
+          "return_date": {
+            "type": "string",
+            "description": "Return date for round-trip flights"
+          },
+          "base_price": {
+            "type": "number",
+            "description": "Base price"
+          },
+          "taxes_fees": {
+            "type": "number",
+            "description": "Taxes and fees",
+            "default": 0
+          },
+          "discounts": {
+            "type": "number",
+            "description": "Discounts applied",
+            "default": 0
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency code",
+            "default": "USD"
+          },
+          "seat_preferences": {
+            "description": "Seat preferences",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "meal_preferences": {
+            "description": "Meal preferences",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "special_requests": {
+            "type": "string",
+            "description": "Special requests"
+          },
+          "payment_status": {
+            "type": "string",
+            "description": "Payment status",
+            "default": "PENDING"
+          }
+        },
+        "required": [
+          "flight_id",
+          "customer_name",
+          "customer_email",
+          "passengers",
+          "departure_date",
+          "base_price",
+          "taxes_fees",
+          "discounts",
+          "currency",
+          "payment_status"
+        ]
+      },
+      "UpdateFlightBookingDto": {
+        "type": "object",
+        "properties": {
+          "flight_id": {
+            "type": "string",
+            "description": "Flight ID"
+          },
+          "customer_name": {
+            "type": "string",
+            "description": "Customer full name"
+          },
+          "customer_email": {
+            "type": "string",
+            "description": "Customer email"
+          },
+          "customer_phone": {
+            "type": "string",
+            "description": "Customer phone number"
+          },
+          "passengers": {
+            "description": "Array of passengers",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PassengerDto"
+            }
+          },
+          "departure_date": {
+            "type": "string",
+            "description": "Departure date (ISO 8601 format)"
+          },
+          "return_date": {
+            "type": "string",
+            "description": "Return date for round-trip flights"
+          },
+          "base_price": {
+            "type": "number",
+            "description": "Base price"
+          },
+          "taxes_fees": {
+            "type": "number",
+            "description": "Taxes and fees",
+            "default": 0
+          },
+          "discounts": {
+            "type": "number",
+            "description": "Discounts applied",
+            "default": 0
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency code",
+            "default": "USD"
+          },
+          "seat_preferences": {
+            "description": "Seat preferences",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "meal_preferences": {
+            "description": "Meal preferences",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "special_requests": {
+            "type": "string",
+            "description": "Special requests"
+          },
+          "payment_status": {
+            "type": "string",
+            "description": "Payment status",
+            "default": "PENDING"
           }
         }
       }
