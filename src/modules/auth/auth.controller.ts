@@ -35,25 +35,22 @@ export class AuthController {
     const { accessToken, refreshToken } =
       await this.authService.login(loginUserDto);
     const envMode = process.env.NODE_ENV?.trim();
+    const isProduction = envMode === 'production';
+
+    const cookieOptions = {
+      httpOnly: true,
+      secure: isProduction,
+      domain: isProduction ? process.env.PRODUCTION_PORTAL_DOMAIN : undefined, // don't set domain in dev
+      path: '/',
+    };
 
     res.cookie(`portal_access_token_${envMode}`, accessToken, {
-      httpOnly: true,
-      secure: envMode === 'production',
-      domain:
-        envMode === 'production'
-          ? process.env.PRODUCTION_PORTAL_URL
-          : undefined,
-      sameSite: envMode === 'production' ? 'none' : 'lax',
+      ...cookieOptions,
+      sameSite: isProduction ? 'none' : ('lax' as const),
     });
-
     res.cookie(`portal_refresh_token_${envMode}`, refreshToken, {
-      httpOnly: true,
-      secure: envMode === 'production',
-      domain:
-        envMode === 'production'
-          ? process.env.PRODUCTION_PORTAL_URL
-          : undefined,
-      sameSite: envMode === 'production' ? 'none' : 'lax',
+      ...cookieOptions,
+      sameSite: isProduction ? 'none' : ('lax' as const),
     });
 
     return { message: 'User logged in successfully' };
@@ -70,25 +67,23 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ): Promise<{ message: string }> {
     const envMode = process.env.NODE_ENV?.trim();
+    const isProduction = envMode === 'production';
+
+    const cookieOptions = {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
+      domain: isProduction ? process.env.PRODUCTION_PORTAL_DOMAIN : undefined,
+      path: '/',
+    };
 
     res.clearCookie(`portal_access_token_${envMode}`, {
-      httpOnly: true,
-      secure: envMode === 'production',
-      domain:
-        envMode === 'production'
-          ? process.env.PRODUCTION_PORTAL_URL
-          : undefined,
-      sameSite: envMode === 'production' ? 'none' : 'lax',
+      ...cookieOptions,
+      sameSite: isProduction ? 'none' : ('lax' as const),
     });
-
     res.clearCookie(`portal_refresh_token_${envMode}`, {
-      httpOnly: true,
-      secure: envMode === 'production',
-      domain:
-        envMode === 'production'
-          ? process.env.PRODUCTION_PORTAL_URL
-          : undefined,
-      sameSite: envMode === 'production' ? 'none' : 'lax',
+      ...cookieOptions,
+      sameSite: isProduction ? 'none' : ('lax' as const),
     });
 
     return { message: 'User logged out successfully' };

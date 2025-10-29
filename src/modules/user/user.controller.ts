@@ -49,18 +49,23 @@ export class UserController {
       await this.userService.refreshToken(refreshTokenDto);
     const envMode = process.env.NODE_ENV?.trim();
 
-    res.cookie(`portal_access_token_${envMode}`, accessToken, {
-      httpOnly: true,
-      secure: envMode === 'production',
-      domain: envMode === 'production' ? process.env.FRONTEND_PORTAL_PROD_URL : undefined,
-      sameSite: envMode === 'production' ? 'none' : 'lax',
-    });
+    const isProduction = envMode === 'production';
 
-    res.cookie(`portal_refresh_token_${envMode}`, refreshToken, {
+    const cookieOptions = {
       httpOnly: true,
-      secure: envMode === 'production',
-      domain: envMode === 'production' ? process.env.FRONTEND_PORTAL_PROD_URL : undefined,
-      sameSite: envMode === 'production' ? 'none' : 'lax',
+      secure: isProduction,
+      domain: isProduction ? process.env.PRODUCTION_PORTAL_DOMAIN : undefined,
+      path: '/',
+    };
+
+    // Set cookies
+    res.cookie(`portal_access_token_${envMode}`, accessToken, {
+      ...cookieOptions,
+      sameSite: isProduction ? 'none' : ('lax' as const),
+    });
+    res.cookie(`portal_refresh_token_${envMode}`, refreshToken, {
+      ...cookieOptions,
+      sameSite: isProduction ? 'none' : ('lax' as const),
     });
     return { message: 'Get Refresh Token Successfully' };
   }
@@ -83,14 +88,14 @@ export class UserController {
     res.cookie(`access_token_${envMode}`, accessToken, {
       httpOnly: true,
       secure: envMode === 'production',
-      domain: envMode === 'production' ? process.env.FRONTEND_PUBLIC_PROD_URL : undefined,
+      domain: envMode === 'production' ? process.env.PRODUCTION_PUBLIC_URL : undefined,
       sameSite: envMode === 'production' ? 'none' : 'lax',
     });
     
     res.cookie(`refresh_token_${envMode}`, refreshToken, {
       httpOnly: true,
       secure: envMode === 'production',
-      domain: envMode === 'production' ? process.env.FRONTEND_PUBLIC_PROD_URL : undefined,
+      domain: envMode === 'production' ? process.env.PRODUCTION_PUBLIC_URL : undefined,
       sameSite: envMode === 'production' ? 'none' : 'lax',
     });
     return { message: 'Get Refresh Token Successfully' };
