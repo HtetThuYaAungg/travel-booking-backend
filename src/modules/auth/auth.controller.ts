@@ -41,7 +41,7 @@ export class AuthController {
       secure: envMode === 'production',
       domain:
         envMode === 'production'
-          ? process.env.FRONTEND_PORTAL_PROD_URL
+          ? process.env.PRODUCTION_PORTAL_URL
           : undefined,
       sameSite: envMode === 'production' ? 'none' : 'lax',
     });
@@ -51,7 +51,7 @@ export class AuthController {
       secure: envMode === 'production',
       domain:
         envMode === 'production'
-          ? process.env.FRONTEND_PORTAL_PROD_URL
+          ? process.env.PRODUCTION_PORTAL_URL
           : undefined,
       sameSite: envMode === 'production' ? 'none' : 'lax',
     });
@@ -76,7 +76,7 @@ export class AuthController {
       secure: envMode === 'production',
       domain:
         envMode === 'production'
-          ? process.env.FRONTEND_PORTAL_PROD_URL
+          ? process.env.PRODUCTION_PORTAL_URL
           : undefined,
       sameSite: envMode === 'production' ? 'none' : 'lax',
     });
@@ -86,7 +86,7 @@ export class AuthController {
       secure: envMode === 'production',
       domain:
         envMode === 'production'
-          ? process.env.FRONTEND_PORTAL_PROD_URL
+          ? process.env.PRODUCTION_PORTAL_URL
           : undefined,
       sameSite: envMode === 'production' ? 'none' : 'lax',
     });
@@ -111,7 +111,7 @@ export class AuthController {
       secure: envMode === 'production',
       domain:
         envMode === 'production'
-          ? process.env.FRONTEND_PUBLIC_PROD_URL
+          ? process.env.PRODUCTION_PUBLIC_URL
           : undefined,
       sameSite: envMode === 'production' ? 'none' : 'lax',
     });
@@ -121,7 +121,7 @@ export class AuthController {
       secure: envMode === 'production',
       domain:
         envMode === 'production'
-          ? process.env.FRONTEND_PUBLIC_PROD_URL
+          ? process.env.PRODUCTION_PUBLIC_URL
           : undefined,
       sameSite: envMode === 'production' ? 'none' : 'lax',
     });
@@ -159,7 +159,7 @@ export class AuthController {
       const tokens = await this.authService.generateTokens(user);
 
       const envMode = process.env.NODE_ENV?.trim();
-      const frontendUrl = process.env.FRONTEND_URL as string;
+      const frontendUrl = process.env.PRODUCTION_PUBLIC_URL as string;
 
       // Set authentication cookies
       res.cookie(`access_token_${envMode}`, tokens.accessToken, {
@@ -167,7 +167,7 @@ export class AuthController {
         secure: envMode === 'production',
         domain:
           envMode === 'production'
-            ? process.env.FRONTEND_PUBLIC_PROD_URL
+            ? process.env.PRODUCTION_PUBLIC_URL
             : undefined,
         sameSite: envMode === 'production' ? 'none' : 'lax',
         maxAge: 24 * 60 * 60 * 1000,
@@ -178,7 +178,7 @@ export class AuthController {
         secure: envMode === 'production',
         domain:
           envMode === 'production'
-            ? process.env.FRONTEND_PUBLIC_PROD_URL
+            ? process.env.PRODUCTION_PUBLIC_URL
             : undefined,
         sameSite: envMode === 'production' ? 'none' : 'lax',
         maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -189,7 +189,7 @@ export class AuthController {
       return { message: 'Authentication successful', user: user } as any;
     } catch (error) {
       console.error('Google OAuth callback error:', error);
-      const frontendUrl = process.env.FRONTEND_URL as string;
+      const frontendUrl = process.env.PRODUCTION_PUBLIC_URL as string;
       res.redirect(`${frontendUrl}?success=false`);
       return { message: 'Authentication failed', error: error } as any;
     }

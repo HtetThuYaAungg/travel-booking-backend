@@ -13,8 +13,9 @@ const getCorsOrigins = (): string[] => {
   const envMode = process.env.NODE_ENV?.trim();
 
   if (envMode === 'production') {
-    const prodUrl = process.env.PRODUCTION_URL as string;
-    return [prodUrl];
+    const prodPortalUrl = process.env.PRODUCTION_PORTAL_URL as string;
+    const prodPublicUrl = process.env.PRODUCTION_PUBLIC_URL as string;
+    return [prodPortalUrl, prodPublicUrl];
   } else if (envMode === 'staging') {
     const stagingUrl = process.env.STAGING_URL as string;
     return [stagingUrl];
