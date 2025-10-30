@@ -85,19 +85,25 @@ export class UserController {
       await this.userService.refreshToken(refreshTokenDto);
     const envMode = process.env.NODE_ENV?.trim();
 
+    const isProduction = envMode === 'production';
+
+    const cookieOptions = {
+      httpOnly: true,
+      secure: isProduction,
+      domain: isProduction ? process.env.PRODUCTION_PUBLIC_DOMAIN : undefined,
+      path: '/',
+    };
+
+    // Set cookies
     res.cookie(`access_token_${envMode}`, accessToken, {
-      httpOnly: true,
-      secure: envMode === 'production',
-      domain: envMode === 'production' ? process.env.PRODUCTION_PUBLIC_URL : undefined,
-      sameSite: envMode === 'production' ? 'none' : 'lax',
+      ...cookieOptions,
+      sameSite: isProduction ? 'none' : ('lax' as const),
     });
-    
     res.cookie(`refresh_token_${envMode}`, refreshToken, {
-      httpOnly: true,
-      secure: envMode === 'production',
-      domain: envMode === 'production' ? process.env.PRODUCTION_PUBLIC_URL : undefined,
-      sameSite: envMode === 'production' ? 'none' : 'lax',
+      ...cookieOptions,
+      sameSite: isProduction ? 'none' : ('lax' as const),
     });
+
     return { message: 'Get Refresh Token Successfully' };
   }
 

@@ -99,27 +99,47 @@ export class AuthController {
   async logoutGoogle(
     @Res({ passthrough: true }) res: Response,
   ): Promise<{ message: string }> {
-    const envMode = process.env.NODE_ENV?.trim();
+
+      const envMode = process.env.NODE_ENV?.trim();
+      const isProduction = envMode === 'production';
+
+      const cookieOptions = {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction ? 'none' : 'lax',
+        domain: isProduction ? process.env.PRODUCTION_PUBLIC_DOMAIN : undefined,
+        path: '/',
+      };
 
     res.clearCookie(`access_token_${envMode}`, {
-      httpOnly: true,
-      secure: envMode === 'production',
-      domain:
-        envMode === 'production'
-          ? process.env.PRODUCTION_PUBLIC_URL
-          : undefined,
-      sameSite: envMode === 'production' ? 'none' : 'lax',
-    });
-
+        ...cookieOptions,
+        sameSite: isProduction ? 'none' : ('lax' as const),
+      });
     res.clearCookie(`refresh_token_${envMode}`, {
-      httpOnly: true,
-      secure: envMode === 'production',
-      domain:
-        envMode === 'production'
-          ? process.env.PRODUCTION_PUBLIC_URL
-          : undefined,
-      sameSite: envMode === 'production' ? 'none' : 'lax',
-    });
+        ...cookieOptions,
+        sameSite: isProduction ? 'none' : ('lax' as const),
+      });
+    // const envMode = process.env.NODE_ENV?.trim();
+
+    // res.clearCookie(`access_token_${envMode}`, {
+    //   httpOnly: true,
+    //   secure: envMode === 'production',
+    //   domain:
+    //     envMode === 'production'
+    //       ? process.env.PRODUCTION_PUBLIC_URL
+    //       : undefined,
+    //   sameSite: envMode === 'production' ? 'none' : 'lax',
+    // });
+
+    // res.clearCookie(`refresh_token_${envMode}`, {
+    //   httpOnly: true,
+    //   secure: envMode === 'production',
+    //   domain:
+    //     envMode === 'production'
+    //       ? process.env.PRODUCTION_PUBLIC_URL
+    //       : undefined,
+    //   sameSite: envMode === 'production' ? 'none' : 'lax',
+    // });
 
     return { message: 'User logged out from Google successfully' };
   }
@@ -153,34 +173,31 @@ export class AuthController {
       const user = req.user as any;
       const tokens = await this.authService.generateTokens(user);
 
+
+
       const envMode = process.env.NODE_ENV?.trim();
-      const frontendUrl = process.env.PRODUCTION_PUBLIC_URL as string;
+      const isProduction = envMode === 'production';
 
-      // Set authentication cookies
+      const cookieOptions = {
+        httpOnly: true,
+        secure: isProduction,
+        domain: isProduction ? process.env.PRODUCTION_PUBLIC_DOMAIN : undefined, // don't set domain in dev
+        path: '/',
+      };
+
       res.cookie(`access_token_${envMode}`, tokens.accessToken, {
-        httpOnly: true,
-        secure: envMode === 'production',
-        domain:
-          envMode === 'production'
-            ? process.env.PRODUCTION_PUBLIC_URL
-            : undefined,
-        sameSite: envMode === 'production' ? 'none' : 'lax',
-        maxAge: 24 * 60 * 60 * 1000,
+        ...cookieOptions,
+        sameSite: isProduction ? 'none' : ('lax' as const),
       });
-
       res.cookie(`refresh_token_${envMode}`, tokens.refreshToken, {
-        httpOnly: true,
-        secure: envMode === 'production',
-        domain:
-          envMode === 'production'
-            ? process.env.PRODUCTION_PUBLIC_URL
-            : undefined,
-        sameSite: envMode === 'production' ? 'none' : 'lax',
-        maxAge: 7 * 24 * 60 * 60 * 1000,
+        ...cookieOptions,
+        sameSite: isProduction ? 'none' : ('lax' as const),
       });
 
       // Redirect to frontend with success status
-      res.redirect(`${frontendUrl}?success=true`);
+      res.redirect(
+        `${isProduction ? process.env.PRODUCTION_PUBLIC_URL : process.env.DEVELOPMENT_PUBLIC_URL}?success=true`,
+      );
       return { message: 'Authentication successful', user: user } as any;
     } catch (error) {
       console.error('Google OAuth callback error:', error);
